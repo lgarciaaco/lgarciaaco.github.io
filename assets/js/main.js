@@ -310,6 +310,7 @@
             var exif = fetchExifData(img);
             var template = '';
             for (var info in exif) {
+                /*
                 if (info === "model") {
                     template += '<i class="fa fa-camera-retro" aria-hidden="true"></i> ' + exif["model"] + '&nbsp;&nbsp;';
                 }
@@ -319,8 +320,9 @@
                 if (info === "shutter_speed") {
                     template += '<i class="fa fa-clock-o" aria-hidden="true"></i> ' + exif["shutter_speed"] + '&nbsp;&nbsp;';
                 }
-                if (info === "iso") {
-                    template += '<i class="fa fa-info-circle" aria-hidden="true"></i> ' + exif["iso"] + '&nbsp;&nbsp;';
+                 */
+                if (info === "date_and_time") {
+                    template += '<i class="fa fa-info-circle" aria-hidden="true"></i> ' + exif["date_and_time"] + '&nbsp;&nbsp;';
                 }
             }
             return template;
