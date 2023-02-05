@@ -36,14 +36,17 @@ layout: default
             <div>
                 <section>
                     <h2>{{ site.footer.name }}</h2>
-                    <p>{{ site.footer.bio }}</p>
-                    <p>{{ site.footer.german }}</p>
-                    <p>{{ site.footer.sponsor }}</p>
+                    <div class="container">
+                        <img src="images/jasmin.jpeg" class="profile"/>
+                        <p>{{ site.footer.bio }}</p>
+                        <p>{{ site.footer.german }}</p>
+                        <p>{{ site.footer.sponsor }}</p>
+                    </div>
                 </section>
                 <section>
-                    <h2>Sponsor</h2>
+                    <h2>Sponsors</h2>
                     <div class="ad">
-                        {{ site.footer.sponsor }}
+                        {{ site.footer.sponsors }}
                     </div>
                 </section>
                 <section>
