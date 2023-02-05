@@ -12,8 +12,12 @@ header:
  subtitle: "by Jasmin Garcia Acosta"
 footer:
  name: "Hey there, my name is Jasmin!"
- bio: "I am a art enthusiast from Berlin and I am 10 years old. This is my portfolio. I love working with water colors, acrylics, oil painting and I am expanding my area of expertise. In my free time I throw slime at the wall :-)"
- github: "Do you want to <a href=\"#\">sponsor me</a>?"
+ bio: |
+   I am a art enthusiast from Berlin and I am 10 years old. This is my portfolio. I love working with water colors, acrylics, oil painting and I am expanding my area of expertise. In my free time I throw slime at the wall :-).
+ german: | 
+   Ich bin 10 Jahre alt, aus Berlin, und ich interessiere mich sehr für Kunst. Das ist mein Portfolio. Ich liebe es mit Wasserfarben zu arbeiten, mit Acryl- und auch mit Ölfarben. Außerdem bin ich ständig dabei, neue Materialien auszuprobieren und meine Kenntnisse zu erweitern. Naja, und in meiner Freizeit mag ich es, Schleim an die Wände zu schmeißen, haha.
+ sponsor: "Do you want to <a href=\"#\">sponsor me</a>?"
+ sponsors: "Moms and Pops"
 web_design: "JGA"
 social_urls:
   facebook: "https://www.facebook.com/j.garcia.ac"
