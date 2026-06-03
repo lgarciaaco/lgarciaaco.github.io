@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Be Part top 20 — filtered (hold-cost Out) (2026-06-03)</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --card: #fff;
+      --text: #15181d;
+      --muted: #5a6470;
+      --border: #d8dee6;
+      --accent: #0b5fff;
+      --best: #e8f5e9;
+      --hover: #f0f4ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+    main { max-width: 1480px; margin: 0 auto; padding: 1.5rem 1rem 2.5rem; }
+    h1 { font-size: 1.45rem; margin: 0 0 0.35rem; }
+    .meta { color: var(--muted); margin-bottom: 1rem; }
+    .meta p { margin: 0.25rem 0; }
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+    }
+    .panel h2 { font-size: 0.92rem; margin: 0 0 0.5rem; }
+    .panel ul { margin: 0; padding-left: 1.15rem; }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.25rem;
+      align-items: end;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      margin-bottom: 0.75rem;
+    }
+    .controls label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .controls select, .controls input {
+      font: inherit;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
+      text-transform: none;
+      letter-spacing: 0;
+      padding: 0.4rem 0.55rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fff;
+      min-width: 8rem;
+    }
+    .controls button {
+      font: inherit;
+      padding: 0.45rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fff;
+      cursor: pointer;
+    }
+    .controls button:hover { background: var(--hover); }
+    .count { margin-left: auto; font-size: 0.85rem; color: var(--muted); align-self: center; }
+    .verdict {
+      background: #fff8e6;
+      border: 1px solid #f0d78c;
+      border-radius: 8px;
+      padding: 0.65rem 0.9rem;
+      margin-bottom: 1rem;
+      font-size: 0.92rem;
+    }
+    .table-wrap {
+      overflow: auto;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      max-height: 78vh;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    th, td { padding: 0.5rem 0.55rem; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    th {
+      background: #eef1f5;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      user-select: none;
+    }
+    th.sortable { cursor: pointer; }
+    th.sortable:hover { background: #e3e9f2; }
+    th.sortable.active { color: var(--accent); }
+    th .arrow { opacity: 0.55; font-size: 0.75em; }
+    td.num { text-align: right; font-variant-numeric: tabular-nums; }
+    td.gap { font-weight: 600; color: #b45309; }
+    tr.best td.gap { color: #15803d; }
+    tr:hover { background: var(--hover); }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    footer { margin-top: 1rem; color: var(--muted); font-size: 0.78rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Be Part top 20 — filtered (hold-cost Out)</h1>
+    <div class="meta">
+      <p><strong>Date:</strong> 2026-06-03</p>
+      <p><strong>Pool:</strong> 67 ≤€350k → excluded 33 (eg 31, no_hausgeld 2) → 34 scored · showing 20 rows</p>
+    </div>
+
+    <section class="panel">
+      <h2>Assumptions</h2>
+      <ul>
+        <li>NK 8% (provisionfrei) · EK €50k · 3.8% / 30y</li>
+        <li><strong>Out</strong> = Rate + HG + Rücklage €50 + Vers. (HP €7 + RS €13 + Mietausfall 3% comp)</li>
+        <li><strong>Min Kalt (+€100)</strong> = Out + 100 · <strong>Gap</strong> = Min Kalt − comp rent</li>
+        <li>WEG insurance in Hausgeld · <strong>SEV €0</strong></li>
+      </ul>
+    </section>
+
+    <div class="verdict"><strong>0/20</strong> at Min Kalt (+€100) vs comp rent. Best: <strong>26998</strong> (Neukölln, Gap +304).</div>
+
+    <div class="controls">
+      <label>Bezirk filter
+        <select id="filterBezirk">
+          <option value="">All</option>
+          <option value="Friedrichshain">Friedrichshain</option>
+<option value="Kreuzberg">Kreuzberg</option>
+<option value="Moabit">Moabit</option>
+<option value="Neukölln">Neukölln</option>
+<option value="Prenzlauer Berg">Prenzlauer Berg</option>
+<option value="Schöneberg">Schöneberg</option>
+<option value="Wilmersdorf">Wilmersdorf</option>
+<option value="k.A">k.A</option>
+        </select>
+      </label>
+      <label>Sort by
+        <select id="sortKey">
+          <option value="gap">Gap</option>
+          <option value="m2">m²</option>
+          <option value="district">Bezirk</option>
+          <option value="kauf">Kauf</option>
+          <option value="rate">Rate</option>
+          <option value="out">Out</option>
+          <option value="min100">Min Kalt</option>
+          <option value="comp">Comp</option>
+          <option value="hg">HG</option>
+          <option value="vers">Vers.</option>
+        </select>
+      </label>
+      <label>Order
+        <select id="sortDir">
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
+        </select>
+      </label>
+      <button type="button" id="resetBtn">Reset</button>
+      <span class="count" id="rowCount"></span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>ID</th>
+            <th class="sortable" data-key="district">Bezirk <span class="arrow"></span></th>
+            <th class="sortable" data-key="kauf">Kauf <span class="arrow"></span></th>
+            <th class="sortable" data-key="m2">m² <span class="arrow"></span></th>
+            <th>Et</th>
+            <th class="sortable" data-key="rate">Rate <span class="arrow"></span></th>
+            <th>HG</th>
+            <th>Vers.</th>
+            <th>Out</th>
+            <th>Min Kalt</th>
+            <th class="sortable" data-key="gap">Gap <span class="arrow"></span></th>
+            <th>Comp</th>
+            <th>Link</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+
+    <footer>Interactive report · click column headers to sort · generated 2026-06-03</footer>
+  </main>
+
+  <script>
+    const ROWS = [{"id": "26998", "url": "https://bepartofberlin.de/immobilien/berlin-neukoelln-sonnenallee-sag006-000122", "kauf": 210000, "m2": 43.52, "rooms": 1.0, "district": "Neukölln", "etage": "1", "title": "Details zu Ihrer Immobilie!", "fields": {"Objekt ID": "SAG006_00012.2", "Kaufpreis": "210.000,00 €", "Hausgeld": "154,00 €", "Verfügbar ab": "sofort", "Art der Immobilie": "ETAGE", "Etage": "1", "Typ": "Kaufen", "Baujahr": "1910", "Energieausweis bis": "2024-08-12", "Energiesparausweis-Typ": "Verbrauchsausweis", "Zustand": "GEPFLEGT", "Nutzungsart": "Wohnung", "Entfernung zur Grundschule": "0.5", "Entfernung zum Gymnasium": "1.2", "Entfernung zur Autobahn": "1.8"}, "hg": 154, "comp": 870, "exclude_reason": null, "rate": 824, "vers": 46, "out": 1074, "min100": 1174, "gap": 304, "darlehen": 176800}, {"id": "26968", "url": "https://bepartofberlin.de/immobilien/berlin-neukoelln-nogatstrasse-ann001-00022", "kauf": 210000, "m2": 38.0, "rooms": 1.0, "district": "Neukölln", "etage": "5", "title": "Details zu Ihrer Immobilie!", "fields": {"Objekt ID": "ANN001_00022", "Kaufpreis": "210.000,00 €", "Hausgeld": "193,11 €", "Verfügbar ab": "Sofort", "Art der Immobilie": "ETAGE", "Etage": "5", "Typ": "Kaufen", "Baujahr": "1955", "Energieausweis bis": "2024-09-13", "Energiesparausweis-Typ": "Bedarfsausweis", "Zustand": "GEPFLEGT", "Nutzungsart": "Wohnung", "Entfernung zur Grundschule": "0.4", "Entfernung zum Gymnasium": "1.5", "Entfernung zur Autobahn": "1.8"}, "hg": 193, "comp": 759, "exclude_reason": null, "rate": 824, "vers": 43, "out": 1110, "min100": 1210, "gap": 451, "darlehen": 176800}, {"id": "27628", "url": "https://bepartofberlin.de/immobilien/berlin-wilmersdorf-durlacherstrasse-ann007-00006", "kauf": 189000, "m2": 32.47, "rooms": 1.0, "district": "Wilmersdorf", "etage": "1", "title": "Details zu Ihrer Immobilie!", "fields": {"Objekt ID": "ANN007_00006", "Kaufpreis": "189.000,00 €", "Hausgeld": "214,00 €", "Verfügbar ab": "sofort", "Art der Immobilie": "ETAGE", "Etage": "1", "Typ": "Kaufen", "Baujahr": "1960", "Energieausweis bis": "2028-05-23", "Energiesparausweis-Typ": "Verbrauchsausweis", "Zustand": "GEPFLEGT", "Nutzungsart": "Wohnung"}, "hg": 214, "comp": 631, "exclude_reason": null, "rate": 718, "vers": 39, "out": 1021, "min100": 1121, "gap": 490, "darlehen": 154120}, {"id": "27772", "url": "https://bepartofberlin.de/immobilien/berlin-kreuzberg-wrangelstrasse-aba012-00281", "kauf": 239000, "m2": 38.9, "rooms": 1.0, "district": "Kreuzberg", "etage": "2", "title": "Details zu Ihrer Immobilie!", "fields": {"Objekt ID": "ABA012_0028.1", "Kaufpreis": "239.000,00 €", "Hausgeld": "154,79 €", "Verfügbar ab": "Sofort", "Art der Immobilie": "ETAGE", "Etage": "2", "Typ": "Kaufen", "Baujahr": "1898", "Energieausweis bis": "2028-09-13", "Energiesparausweis-Typ": "Bedarfsausweis", "Zustand": "MODERNISIERT", "Nutzungsart": "Wohnung"}, "hg": 155, "comp": 798, "exclude_reason": null, "rate": 970, "vers": 44, "out": 1219, "min100": 1319, "gap": 521, "darlehen": 208120}, {"id": "26965", "url": "https://bepartofberlin.de/immobilien/berlin-neukoelln-nogatstrasse-ann001-00004", "kauf": 225000, "m2": 38.0, "rooms": 1.0, "district": "Neukölln", "etage": "1", "title": "Details zu Ihrer Immobilie!", "fields": {"Objekt ID": "ANN001_00004", "Kaufpreis": "225.000,00 €", "Hausgeld": "193,11 €", "Verfügbar ab": "sofort", "Art der Immobilie": "ETAGE", "Etage": "1", "Typ": "Kaufen", "Baujahr": "1955", "Energieausweis bis": "2024-09-13", "Energiesparausweis-Typ": "Bedarfsausweis", "Zustand": "GEPFLEGT", "Nutzungsart": "Wohnung", "Entfernung zur Grundschule": "0.4", "Entfernung zum Gymnasium": "1.5", "Entfernung zur Autobahn": "1.8"}, "hg": 193, "comp": 759, "exclude_reason": null, "rate": 899, "vers": 43, "out": 1185, "min100": 1285, "gap": 526, "darlehen": 193000}, {"id": "27778", "url": "https://bepartofberlin.de/immobilien/berlin-wilmersdorf-bruchsaler-ann007-00010", "kauf": 210000, "m2": 36.75, "rooms": 1.0, "district": "Wilmersdorf", "etage": "1", "title": "Details zu Ihrer Immobilie!", "fields": {"Objekt ID": "ANN007_00010", "Kaufpreis": "210.000,00 €", "Hausgeld": "238,00 €", "Verfügbar ab": "sofort", "Art der Immobilie": "ETAGE", "Etage": "1", "Typ": "Kaufen", "Baujahr": "1960", "Energieausweis bis": "2028-05-23", "Energiesparausweis-Typ": "Verbrauchsausweis", "Zustand": "GEPFLEGT", "Nutzungsart": "Wohnung"}, "hg": 238, "comp": 714, "exclude_reason": null, "rate": 824, "vers": 41, "out": 1153, "min100": 1253, "gap": 539, "darlehen": 176800}, {"id": "27382", "url": "https://bepartofberlin.de/immobilien/berlin-wrangelstrasse-aba012-000161", "kauf": 210000, "m2": 32.07, "rooms": 1.0, "district": "k.A", "etage": "2", "title": "Details zu Ihrer Immobilie!", "fields": {"Objekt ID": "ABA012_00016.1", "Kaufpreis": "210.000,00 €", "Hausgeld": "135,79 €", "Verfügbar ab": "Sofort", "Art der Immobilie": "ETAGE", "Etage": "2", "Typ": "Kaufen", "Baujahr": "1898", "Energieausweis bis": "2028-09-13", "Energiesparausweis-Typ": "Bedarfsausweis", "Zustand": "MODERNISIERT", "Nutzungsart": "Wohnung"}, "hg": 136, "comp": 589, "exclude_reason": null, "rate": 824, "vers": 38, "out": 1048, "min100": 1148, "gap": 559, "darlehen": 176800}, {"id": "27895", "url": "https://bepartofberlin.de/immobilien/berlin-neukoelln-reuterstr-aba011-00023", "kauf": 229000, "m2": 37.73, "rooms": 1.0, "district": "Neukölln", "etage": "1", "title": "Details zu Ihrer Immobilie!", "fields": {"Objekt ID": "ABA011_00023", "Kaufpreis": "229.000,00 €", "Hausgeld": "201,22 €", "Verfügbar ab": "sofort oder n. V.", "Art der Immobilie": "ETAGE", "Etage": "1", "Typ": "Kaufen", "Baujahr": "1929", "Energieausweis bis": "2029-10-31", "Energiesparausweis-Typ": "Bedarfsausweis", "Zustand": "GEPFLEGT", "Nutzungsart": "Wohnung", "Entfernung zur Grundschule": "1.8", "Entfernung zum Gymnasium": "2.5", "Entfernung zur Autobahn": "7.4", "Entfernung zum Zentrum": "2"}, "hg": 201, "comp": 754, "exclude_reason": null, "rate": 919, "vers": 43, "out": 1213, "min100": 1313, "gap": 559, "darlehen": 197320}, {"id": "27775", "url": "https://bepartofberlin.de/immobilien/berlin-kreuzberg-wienerstr-ebo013-00010", "kauf": 210000, "m2": 32.5, "rooms": 1.0, "district": "Kreuzberg", "etage": "1", "title": "Details zu Ihrer Immobilie!", "fields": {"Objekt ID": "EBO013_00010", "Kaufpreis": "210.000,00 €", "Hausgeld": "213,16 €", "Verfügbar ab": "sofort", "Art der Immobilie": "ETAGE", "Etage": "1", "Typ": "Kaufen", "Baujahr": "1900", "Energieausweis bis": "2028-12-06", "Energiesparausweis-Typ": "Bedarfsausweis", "Zustand": "k.A", "Nutzungsart": "Wohnung", "Entfernung zur Grundschule": "0.3", "Entfernung zur Realschule": "0.6", "Entfernung zum Gymnasium": "1.4", "Entfernung zur Autobahn": "7"}, "hg": 213, "comp": 667, "exclude_reason": null, "rate": 824, "vers": 40, "out": 1127, "min100": 1227, "gap": 560, "darlehen": 176800}, {"id": "27631", "url": "https://bepartofberlin.de/immobilien/berlin-friedrichshain-samariterstr-lon004-00007", "kauf": 239000, "m2": 39.6, "rooms": 1.0, "district": "Friedrichshain", "etage": "1", "title": "Details zu Ihrer Immobilie!", "fields": {"Objekt ID": "LON004_00007", "Kaufpreis": "239.000,00 €", "Hausgeld": "241,15 €", "Verfügbar ab": "sofort", "Art der Immobilie": "ETAGE", "Etage": "1", "Typ": "Kaufen", "Baujahr": "1920", "Energieausweis bis": "2031-07-19", "Energiesparausweis-Typ": "Bedarfsausweis", "Zustand": "GEPFLEGT", "Nutzungsart": "Wohnung", "Entfernung zur Grundschule": "0.3", "Entfernung zum Gymnasium": "0.4", "Entfernung zur Autobahn": "8.3", "Entfernung zum Zentrum": "3.9"}, "hg": 241, "comp": 813, "exclude_reason": null, "rate": 970, "vers": 44, "out": 1305, "min100": 1405, "gap": 592, "darlehen": 208120}, {"id": "27634", "url": "https://bepartofberlin.de/immobilien/berlin-friedrichshain-samariterstr-lon004-000171d", "kauf": 249000, "m2": 39.94, "rooms": 1.0, "district": "Friedrichshain", "etage": "3", "title": "Details zu Ihrer Immobilie!", "fields": {"Objekt ID": "LON004_00017.1D", "Kaufpreis": "249.000,00 €", "Hausgeld": "242,61 €", "Verfügbar ab": "sofort", "Art der Immobilie": "ETAGE", "Etage": "3", "Typ": "Kaufen", "Baujahr": "1920", "Energieausweis bis": "2031-07-19", "Energiesparausweis-Typ": "Bedarfsausweis", "Zustand": "GEPFLEGT", "Nutzungsart": "Wohnung", "Entfernung zur Grundschule": "0.3", "Entfernung zum Gymnasium": "0.4", "Entfernung zur Autobahn": "8.3", "Entfernung zum Zentrum": "3.9"}, "hg": 243, "comp": 820, "exclude_reason": null, "rate": 1020, "vers": 45, "out": 1358, "min100": 1458, "gap": 638, "darlehen": 218920}, {"id": "27904", "url": "https://bepartofberlin.de/immobilien/berlin-neukoelln-leykestrasse-tim003-00017", "kauf": 335000, "m2": 71.0, "rooms": 2.0, "district": "Neukölln", "etage": "1", "title": "Details zu Ihrer Immobilie!", "fields": {"Objekt ID": "TIM003_00017", "Kaufpreis": "335.000,00 €", "Hausgeld": "299,11 €", "Verfügbar ab": "sofort", "Art der Immobilie": "ETAGE", "Etage": "1", "Typ": "Kaufen", "Baujahr": "1910", "Energieausweis bis": "2031-06-14", "Energiesparausweis-Typ": "Bedarfsausweis", "Zustand": "GEPFLEGT", "Nutzungsart": "Wohnung"}, "hg": 299, "comp": 1314, "exclude_reason": null, "rate": 1453, "vers": 59, "out": 1861, "min100": 1961, "gap": 647, "darlehen": 311800}, {"id": "28069", "url": "https://bepartofberlin.de/immobilien/berlin-friedrichshain-libauerstr-fai006-000311", "kauf": 289000, "m2": 50.0, "rooms": 1.0, "district": "Friedrichshain", "etage": "4", "title": "Details zu Ihrer Immobilie!", "fields": {"Objekt ID": "FAI006_00031.1", "Kaufpreis": "289.000,00 €", "Hausgeld": "218,05 €", "Verfügbar ab": "sofort", "Art der Immobilie": "ETAGE", "Etage": "4", "Typ": "Kaufen", "Baujahr": "1905", "Energieausweis bis": "2028-10-12", "Energiesparausweis-Typ": "Verbrauchsausweis", "Zustand": "GEPFLEGT", "Nutzungsart": "Wohnung", "Entfernung zur Grundschule": "0.5", "Entfernung zum Gymnasium": "0.4", "Entfernung zur Autobahn": "6", "Entfernung zum Zentrum": "3"}, "hg": 218, "comp": 950, "exclude_reason": null, "rate": 1221, "vers": 48, "out": 1537, "min100": 1637, "gap": 687, "darlehen": 262120}, {"id": "28093", "url": "https://bepartofberlin.de/immobilien/berlin-prenzlauerberg-pappelallee-mag014-000311", "kauf": 290000, "m2": 54.06, "rooms": 2.0, "district": "Prenzlauer Berg", "etage": "4", "title": "Details zu Ihrer Immobilie!", "fields": {"Objekt ID": "MAG014_00031.1", "Kaufpreis": "290.000,00 €", "Hausgeld": "232,51 €", "Verfügbar ab": "Sofort", "Art der Immobilie": "ETAGE", "Etage": "4", "Typ": "Kaufen", "Baujahr": "1896", "Energieausweis bis": "2032-04-26", "Energiesparausweis-Typ": "Bedarfsausweis", "Zustand": "GEPFLEGT", "Nutzungsart": "Wohnung"}, "hg": 233, "comp": 946, "exclude_reason": null, "rate": 1226, "vers": 48, "out": 1557, "min100": 1657, "gap": 711, "darlehen": 263200}, {"id": "27769", "url": "https://bepartofberlin.de/immobilien/berlin-moabit-bandelstr-fir001-00028", "kauf": 269000, "m2": 55.57, "rooms": 2.0, "district": "Moabit", "etage": "4", "title": "Details zu Ihrer Immobilie!", "fields": {"Objekt ID": "FIR001_00028", "Kaufpreis": "269.000,00 €", "Hausgeld": "267,27 €", "Verfügbar ab": "sofort", "Art der Immobilie": "ETAGE", "Etage": "4", "Typ": "Kaufen", "Baujahr": "1958", "Energieausweis bis": "2030-11-09", "Energiesparausweis-Typ": "Bedarfsausweis", "Zustand": "GEPFLEGT", "Nutzungsart": "Wohnung", "Entfernung zur Grundschule": "2.8", "Entfernung zum Gymnasium": "3.1", "Entfernung zur Autobahn": "4.7", "Entfernung zum Zentrum": "3.1"}, "hg": 267, "comp": 861, "exclude_reason": null, "rate": 1121, "vers": 46, "out": 1484, "min100": 1584, "gap": 723, "darlehen": 240520}, {"id": "28051", "url": "https://bepartofberlin.de/immobilien/berlin-schoeneberg-winterfeldtstrasse-lou005-00015", "kauf": 275000, "m2": 45.1, "rooms": 1.0, "district": "Schöneberg", "etage": "1", "title": "Details zu Ihrer Immobilie!", "fields": {"Objekt ID": "LOU005_00015", "Kaufpreis": "275.000,00 €", "Hausgeld": "176,16 €", "Art der Immobilie": "ETAGE", "Etage": "1", "Typ": "Kaufen", "Baujahr": "1904", "Energieausweis bis": "2034-07-08", "Energiesparausweis-Typ": "Bedarfsausweis", "Zustand": "k.A", "Nutzungsart": "Wohnung", "Entfernung zum Zentrum": "2"}, "hg": 176, "comp": 789, "exclude_reason": null, "rate": 1151, "vers": 44, "out": 1421, "min100": 1521, "gap": 732, "darlehen": 247000}, {"id": "27697", "url": "https://bepartofberlin.de/immobilien/berlin-neukoelln-mariendorferweg-dom001-00035", "kauf": 260000, "m2": 46.26, "rooms": 2.0, "district": "Neukölln", "etage": "2", "title": "Details zu Ihrer Immobilie!", "fields": {"Objekt ID": "DOM001_00035", "Kaufpreis": "260.000,00 €", "Hausgeld": "319,35 €", "Verfügbar ab": "sofort", "Art der Immobilie": "ETAGE", "Etage": "2", "Typ": "Kaufen", "Baujahr": "1994", "Energieausweis bis": "2022-03-19", "Energiesparausweis-Typ": "Bedarfsausweis", "Zustand": "GEPFLEGT", "Nutzungsart": "Wohnung", "Entfernung zur Grundschule": "0.55", "Entfernung zur Realschule": "0.6", "Entfernung zum Gymnasium": "3.5", "Entfernung zur Autobahn": "1.7", "Entfernung zum Zentrum": "8.9"}, "hg": 319, "comp": 856, "exclude_reason": null, "rate": 1075, "vers": 46, "out": 1490, "min100": 1590, "gap": 734, "darlehen": 230800}, {"id": "27616", "url": "https://bepartofberlin.de/immobilien/berlin-prenzlauerberg-rudolf-schwarz-strasse-elv001-a0049", "kauf": 285000, "m2": 52.46, "rooms": 2.0, "district": "Prenzlauer Berg", "etage": "3", "title": "Details zu Ihrer Immobilie!", "fields": {"Objekt ID": "ELV001_A0049", "Kaufpreis": "285.000,00 €", "Hausgeld": "261,22 €", "Verfügbar ab": "sofort", "Art der Immobilie": "ETAGE", "Etage": "3", "Typ": "Kaufen", "Baujahr": "1937", "Energieausweis bis": "2034-04-07", "Energiesparausweis-Typ": "Verbrauchsausweis", "Zustand": "GEPFLEGT", "Nutzungsart": "Wohnung", "Entfernung zur Grundschule": "0.6", "Entfernung zum Gymnasium": "0.3", "Entfernung zur Autobahn": "5", "Entfernung zum Zentrum": "2.5"}, "hg": 261, "comp": 918, "exclude_reason": null, "rate": 1201, "vers": 48, "out": 1560, "min100": 1660, "gap": 742, "darlehen": 257800}, {"id": "27907", "url": "https://bepartofberlin.de/immobilien/berlin-neukoelln-mariendorferweg-dom001-000801", "kauf": 280000, "m2": 51.73, "rooms": 2.0, "district": "Neukölln", "etage": "3", "title": "Details zu Ihrer Immobilie!", "fields": {"Objekt ID": "DOM001_00080.1", "Kaufpreis": "280.000,00 €", "Hausgeld": "323,52 €", "Verfügbar ab": "sofort", "Art der Immobilie": "ETAGE", "Etage": "3", "Typ": "Kaufen", "Baujahr": "1994", "Energieausweis bis": "2022-03-19", "Energiesparausweis-Typ": "Bedarfsausweis", "Zustand": "GEPFLEGT", "Nutzungsart": "Wohnung", "Entfernung zur Grundschule": "0.55", "Entfernung zur Realschule": "0.6", "Entfernung zum Gymnasium": "3.5", "Entfernung zur Autobahn": "1.7", "Entfernung zum Zentrum": "8.9"}, "hg": 324, "comp": 957, "exclude_reason": null, "rate": 1176, "vers": 49, "out": 1599, "min100": 1699, "gap": 742, "darlehen": 252400}, {"id": "27880", "url": "https://bepartofberlin.de/immobilien/berlin-wilmersdorf-mecklenburgischestrasse-aba005-00034", "kauf": 349000, "m2": 67.0, "rooms": 2.0, "district": "Wilmersdorf", "etage": "4", "title": "Details zu Ihrer Immobilie!", "fields": {"Objekt ID": "ABA005_00034", "Kaufpreis": "349.000,00 €", "Hausgeld": "227,74 €", "Verfügbar ab": "sofort", "Art der Immobilie": "ETAGE", "Etage": "4", "Typ": "Kaufen", "Baujahr": "1900", "Energieausweis bis": "2029-09-26", "Energiesparausweis-Typ": "Bedarfsausweis", "Zustand": "GEPFLEGT", "Nutzungsart": "Wohnung"}, "hg": 228, "comp": 1206, "exclude_reason": null, "rate": 1523, "vers": 56, "out": 1857, "min100": 1957, "gap": 751, "darlehen": 326920}];
+    const fmt = (n) => new Intl.NumberFormat('de-DE').format(Math.round(n));
+    const fmtKauf = (n) => '€' + Math.round(n / 1000) + 'k';
+
+    let sortKey = 'gap';
+    let sortDir = 'asc';
+    let filterBezirk = '';
+
+    const tbody = document.getElementById('tbody');
+    const sortKeyEl = document.getElementById('sortKey');
+    const sortDirEl = document.getElementById('sortDir');
+    const filterEl = document.getElementById('filterBezirk');
+    const rowCountEl = document.getElementById('rowCount');
+
+    function compare(a, b, key) {
+      if (key === 'district') {
+        return String(a.district || '').localeCompare(String(b.district || ''), 'de');
+      }
+      const av = Number(a[key]);
+      const bv = Number(b[key]);
+      if (Number.isFinite(av) && Number.isFinite(bv)) return av - bv;
+      return String(a[key] ?? '').localeCompare(String(b[key] ?? ''), 'de');
+    }
+
+    function render() {
+      let rows = ROWS.filter(r => !filterBezirk || r.district === filterBezirk);
+      rows = rows.slice().sort((a, b) => {
+        const c = compare(a, b, sortKey);
+        return sortDir === 'asc' ? c : -c;
+      });
+
+      tbody.innerHTML = rows.map((r, i) => {
+        const best = sortKey === 'gap' && sortDir === 'asc' && i === 0;
+        const gapCls = best ? 'best' : '';
+        return `<tr class="${gapCls}">
+          <td>${i + 1}</td>
+          <td><strong>${r.id}</strong></td>
+          <td>${r.district || 'k.A'}</td>
+          <td class="num">${fmtKauf(r.kauf)}</td>
+          <td class="num">${Number(r.m2).toFixed(1)}</td>
+          <td class="num">${r.etage ?? '?'}</td>
+          <td class="num">${fmt(r.rate)}</td>
+          <td class="num">${fmt(r.hg)}</td>
+          <td class="num">${fmt(r.vers)}</td>
+          <td class="num"><strong>${fmt(r.out)}</strong></td>
+          <td class="num">${fmt(r.min100)}</td>
+          <td class="num gap">+${fmt(r.gap)}</td>
+          <td class="num">${fmt(r.comp)}</td>
+          <td><a href="${r.url}" target="_blank" rel="noopener">Exposé</a></td>
+        </tr>`;
+      }).join('');
+
+      rowCountEl.textContent = rows.length + ' shown';
+
+      document.querySelectorAll('th.sortable').forEach(th => {
+        th.classList.toggle('active', th.dataset.key === sortKey);
+        const arrow = th.querySelector('.arrow');
+        if (arrow) arrow.textContent = th.dataset.key === sortKey ? (sortDir === 'asc' ? '▲' : '▼') : '';
+      });
+    }
+
+    sortKeyEl.addEventListener('change', () => { sortKey = sortKeyEl.value; render(); });
+    sortDirEl.addEventListener('change', () => { sortDir = sortDirEl.value; render(); });
+    filterEl.addEventListener('change', () => { filterBezirk = filterEl.value; render(); });
+
+    document.querySelectorAll('th.sortable').forEach(th => {
+      th.addEventListener('click', () => {
+        const key = th.dataset.key;
+        if (sortKey === key) sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+        else { sortKey = key; sortDir = ['kauf','rate','out','gap','m2','min100','comp','hg','vers'].includes(key) ? 'asc' : 'asc'; }
+        sortKeyEl.value = sortKey;
+        sortDirEl.value = sortDir;
+        render();
+      });
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      sortKey = 'gap'; sortDir = 'asc'; filterBezirk = '';
+      sortKeyEl.value = sortKey; sortDirEl.value = sortDir; filterEl.value = '';
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
