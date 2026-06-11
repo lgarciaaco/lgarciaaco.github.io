@@ -202,6 +202,8 @@
     margin-left: 4px;
   }
   .all-good { padding: 10px 14px; color: var(--green); font-size: 13px; }
+  .owned-row .s-code { color: var(--green); }
+  .owned-row { opacity: 0.9; }
 
   /* Extras grid */
   .extras-grid {
@@ -294,6 +296,7 @@
 
 <div class="tabs">
   <button class="tab active" onclick="switchTab('missing', this)">Missing (818)</button>
+  <button class="tab" onclick="switchTab('owned', this)">Owned (162)</button>
   <button class="tab" onclick="switchTab('extras', this)">Extras (0)</button>
 </div>
 
@@ -829,12 +832,543 @@
   <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">PAN 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">PAN 2</span><span class="s-name">Orlando Mosquera</span></div><div class="sticker-row"><span class="s-code">PAN 4</span><span class="s-name">Fidel Escobar</span></div><div class="sticker-row"><span class="s-code">PAN 5</span><span class="s-name">Andres Andrade</span></div><div class="sticker-row"><span class="s-code">PAN 6</span><span class="s-name">Michael Amir Murillo</span></div><div class="sticker-row"><span class="s-code">PAN 7</span><span class="s-name">Eric Davis</span></div><div class="sticker-row"><span class="s-code">PAN 8</span><span class="s-name">Jose Cordoba</span></div><div class="sticker-row"><span class="s-code">PAN 9</span><span class="s-name">Cesar Blackman</span></div><div class="sticker-row"><span class="s-code">PAN 10</span><span class="s-name">Cristian Martinez</span></div><div class="sticker-row"><span class="s-code">PAN 11</span><span class="s-name">Aníbal Godoy</span></div><div class="sticker-row"><span class="s-code">PAN 12</span><span class="s-name">Adalberto Carrasquilla</span></div><div class="sticker-row"><span class="s-code">PAN 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">PAN 15</span><span class="s-name">Édgar Bárcenas</span></div><div class="sticker-row"><span class="s-code">PAN 16</span><span class="s-name">Carlos Harvey</span></div><div class="sticker-row"><span class="s-code">PAN 17</span><span class="s-name">Ismael Díaz</span></div><div class="sticker-row"><span class="s-code">PAN 18</span><span class="s-name">Jose Fajardo</span></div><div class="sticker-row"><span class="s-code">PAN 19</span><span class="s-name">Cecilio Waterman</span></div><div class="sticker-row"><span class="s-code">PAN 20</span><span class="s-name">Jose Luiz Rodriguez</span></div></div>
 </div></div>
   </div>
+  <div id="tab-owned" class="tab-panel">
+    <div class="group-block"><div class="group-label">Group A</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇲🇽</span>
+    <span class="team-name">Mexico</span>
+    <span class="team-progress-text">2/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:10%"></div></div>
+    <span class="complete-badge">2 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">MEX 10</span><span class="s-name">Edson Alvarez</span></div><div class="sticker-row owned-row"><span class="s-code">MEX 13</span><span class="s-name">Team Photo</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇨🇿</span>
+    <span class="team-name">Czechia</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="complete-badge">4 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">CZE 3</span><span class="s-name">Jindrich Stanek</span></div><div class="sticker-row owned-row"><span class="s-code">CZE 9</span><span class="s-name">Michal Sadilek</span></div><div class="sticker-row owned-row"><span class="s-code">CZE 12</span><span class="s-name">Tomas Soucek</span></div><div class="sticker-row owned-row"><span class="s-code">CZE 18</span><span class="s-name">Tomas Chory</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇿🇦</span>
+    <span class="team-name">South Africa</span>
+    <span class="team-progress-text">3/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:15%"></div></div>
+    <span class="complete-badge">3 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">RSA 2</span><span class="s-name">Ronwen Williams</span></div><div class="sticker-row owned-row"><span class="s-code">RSA 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row owned-row"><span class="s-code">RSA 17</span><span class="s-name">Sipho Mbule</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇰🇷</span>
+    <span class="team-name">South Korea</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="complete-badge">4 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">KOR 3</span><span class="s-name">Seung-Gyu Kim</span></div><div class="sticker-row owned-row"><span class="s-code">KOR 4</span><span class="s-name">Min-jae Kim</span></div><div class="sticker-row owned-row"><span class="s-code">KOR 7</span><span class="s-name">Han-beom Lee</span></div><div class="sticker-row owned-row"><span class="s-code">KOR 8</span><span class="s-name">Tae-seok Lee</span></div></div>
+</div></div><div class="group-block"><div class="group-label">Group B</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇨🇦</span>
+    <span class="team-name">Canada</span>
+    <span class="team-progress-text">6/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:30%"></div></div>
+    <span class="complete-badge">6 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">CAN 3</span><span class="s-name">Alphonso Davies</span></div><div class="sticker-row owned-row"><span class="s-code">CAN 4</span><span class="s-name">Alistair Johnston</span></div><div class="sticker-row owned-row"><span class="s-code">CAN 9</span><span class="s-name">Kamal Miller</span></div><div class="sticker-row owned-row"><span class="s-code">CAN 17</span><span class="s-name">Niko Sigur</span></div><div class="sticker-row owned-row"><span class="s-code">CAN 19</span><span class="s-name">Liam Millar</span></div><div class="sticker-row owned-row"><span class="s-code">CAN 20</span><span class="s-name">Cyle Larin</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇧🇦</span>
+    <span class="team-name">Bosnia & Herzegovina</span>
+    <span class="team-progress-text">2/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:10%"></div></div>
+    <span class="complete-badge">2 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">BIH 6</span><span class="s-name">Nihad Mujakic</span></div><div class="sticker-row owned-row"><span class="s-code">BIH 18</span><span class="s-name">Ermedin Demirovic</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇶🇦</span>
+    <span class="team-name">Qatar</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="complete-badge">4 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">QAT 4</span><span class="s-name">Lucas Mendes</span></div><div class="sticker-row owned-row"><span class="s-code">QAT 9</span><span class="s-name">Mohamed Al-Mannai</span></div><div class="sticker-row owned-row"><span class="s-code">QAT 10</span><span class="s-name">Karim Boudiaf</span></div><div class="sticker-row owned-row"><span class="s-code">QAT 18</span><span class="s-name">Edmilson Junior</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇨🇭</span>
+    <span class="team-name">Switzerland</span>
+    <span class="team-progress-text">2/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:10%"></div></div>
+    <span class="complete-badge">2 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">SUI 6</span><span class="s-name">Nico Elvedi</span></div><div class="sticker-row owned-row"><span class="s-code">SUI 15</span><span class="s-name">Ardon Jashari</span></div></div>
+</div></div><div class="group-block"><div class="group-label">Group C</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇧🇷</span>
+    <span class="team-name">Brazil</span>
+    <span class="team-progress-text">7/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:35%"></div></div>
+    <span class="complete-badge">7 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">BRA 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row owned-row"><span class="s-code">BRA 4</span><span class="s-name">Marquinhos</span></div><div class="sticker-row owned-row"><span class="s-code">BRA 11</span><span class="s-name">Bruno Guimarães</span></div><div class="sticker-row owned-row"><span class="s-code">BRA 14</span><span class="s-name">Player 14</span></div><div class="sticker-row owned-row"><span class="s-code">BRA 15</span><span class="s-name">Vinicius Júnior</span></div><div class="sticker-row owned-row"><span class="s-code">BRA 16</span><span class="s-name">Rodrygo</span></div><div class="sticker-row owned-row"><span class="s-code">BRA 17</span><span class="s-name">João Pedro</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇲🇦</span>
+    <span class="team-name">Morocco</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="complete-badge">4 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">MAR 10</span><span class="s-name">Sofyan Amrabat</span></div><div class="sticker-row owned-row"><span class="s-code">MAR 11</span><span class="s-name">Azzedine Ounahi</span></div><div class="sticker-row owned-row"><span class="s-code">MAR 15</span><span class="s-name">Bilal El Khannouss</span></div><div class="sticker-row owned-row"><span class="s-code">MAR 19</span><span class="s-name">Soufiane Rahimi</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇭🇹</span>
+    <span class="team-name">Haiti</span>
+    <span class="team-progress-text">3/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:15%"></div></div>
+    <span class="complete-badge">3 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">HAI 3</span><span class="s-name">Carlens Arcus</span></div><div class="sticker-row owned-row"><span class="s-code">HAI 4</span><span class="s-name">Martin Expérience</span></div><div class="sticker-row owned-row"><span class="s-code">HAI 12</span><span class="s-name">Jean-Ricner Bellegarde</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>
+    <span class="team-name">Scotland</span>
+    <span class="team-progress-text">3/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:15%"></div></div>
+    <span class="complete-badge">3 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">SCO 3</span><span class="s-name">Jack Hendry</span></div><div class="sticker-row owned-row"><span class="s-code">SCO 11</span><span class="s-name">Scott McTominay</span></div><div class="sticker-row owned-row"><span class="s-code">SCO 17</span><span class="s-name">Kenny McLean</span></div></div>
+</div></div><div class="group-block"><div class="group-label">Group D</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇺🇸</span>
+    <span class="team-name">USA</span>
+    <span class="team-progress-text">5/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:25%"></div></div>
+    <span class="complete-badge">5 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">USA 12</span><span class="s-name">Timothy Weah</span></div><div class="sticker-row owned-row"><span class="s-code">USA 15</span><span class="s-name">Diego Luna</span></div><div class="sticker-row owned-row"><span class="s-code">USA 16</span><span class="s-name">Malik Tillman</span></div><div class="sticker-row owned-row"><span class="s-code">USA 17</span><span class="s-name">Christian Pulisic</span></div><div class="sticker-row owned-row"><span class="s-code">USA 19</span><span class="s-name">Ricardo Pepi</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇵🇾</span>
+    <span class="team-name">Paraguay</span>
+    <span class="team-progress-text">3/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:15%"></div></div>
+    <span class="complete-badge">3 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">PAR 6</span><span class="s-name">Juan José Cáceres</span></div><div class="sticker-row owned-row"><span class="s-code">PAR 9</span><span class="s-name">Mathías Villasanti</span></div><div class="sticker-row owned-row"><span class="s-code">PAR 15</span><span class="s-name">Matias Galarza Fonda</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇦🇺</span>
+    <span class="team-name">Australia</span>
+    <span class="team-progress-text">5/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:25%"></div></div>
+    <span class="complete-badge">5 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">AUS 3</span><span class="s-name">Joe Gauci</span></div><div class="sticker-row owned-row"><span class="s-code">AUS 8</span><span class="s-name">Cameron Burgess</span></div><div class="sticker-row owned-row"><span class="s-code">AUS 12</span><span class="s-name">Riley McGree</span></div><div class="sticker-row owned-row"><span class="s-code">AUS 15</span><span class="s-name">Aiden O'Neill</span></div><div class="sticker-row owned-row"><span class="s-code">AUS 20</span><span class="s-name">Nestory Irankunda</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇹🇷</span>
+    <span class="team-name">Türkiye</span>
+    <span class="team-progress-text">3/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:15%"></div></div>
+    <span class="complete-badge">3 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">TUR 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row owned-row"><span class="s-code">TUR 14</span><span class="s-name">Player 14</span></div><div class="sticker-row owned-row"><span class="s-code">TUR 17</span><span class="s-name">Yunus Akgun</span></div></div>
+</div></div><div class="group-block"><div class="group-label">Group E</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇩🇪</span>
+    <span class="team-name">Germany</span>
+    <span class="team-progress-text">3/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:15%"></div></div>
+    <span class="complete-badge">3 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">GER 5</span><span class="s-name">Nico Schlotterbeck</span></div><div class="sticker-row owned-row"><span class="s-code">GER 16</span><span class="s-name">Jamal Musiala</span></div><div class="sticker-row owned-row"><span class="s-code">GER 18</span><span class="s-name">Kai Havertz</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇨🇼</span>
+    <span class="team-name">Curaçao</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="complete-badge">4 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">CUW 4</span><span class="s-name">Sherel Floranus</span></div><div class="sticker-row owned-row"><span class="s-code">CUW 8</span><span class="s-name">Shurandy Sambo</span></div><div class="sticker-row owned-row"><span class="s-code">CUW 17</span><span class="s-name">Jearl Margaritha</span></div><div class="sticker-row owned-row"><span class="s-code">CUW 19</span><span class="s-name">Jeremy Antonisse</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇨🇮</span>
+    <span class="team-name">Ivory Coast</span>
+    <span class="team-progress-text">1/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:5%"></div></div>
+    <span class="complete-badge">1 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">CIV 5</span><span class="s-name">Odilon Kossounou</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇪🇨</span>
+    <span class="team-name">Ecuador</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="complete-badge">4 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">ECU 9</span><span class="s-name">Moises Caicedo</span></div><div class="sticker-row owned-row"><span class="s-code">ECU 10</span><span class="s-name">Alan Franco</span></div><div class="sticker-row owned-row"><span class="s-code">ECU 11</span><span class="s-name">Kendry Paez</span></div><div class="sticker-row owned-row"><span class="s-code">ECU 15</span><span class="s-name">John Veboah</span></div></div>
+</div></div><div class="group-block"><div class="group-label">Group F</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇳🇱</span>
+    <span class="team-name">Netherlands</span>
+    <span class="team-progress-text">2/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:10%"></div></div>
+    <span class="complete-badge">2 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">NED 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row owned-row"><span class="s-code">NED 13</span><span class="s-name">Team Photo</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇯🇵</span>
+    <span class="team-name">Japan</span>
+    <span class="team-progress-text">2/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:10%"></div></div>
+    <span class="complete-badge">2 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">JPN 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row owned-row"><span class="s-code">JPN 9</span><span class="s-name">Yuki Soma</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇸🇪</span>
+    <span class="team-name">Sweden</span>
+    <span class="team-progress-text">2/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:10%"></div></div>
+    <span class="complete-badge">2 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">SWE 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row owned-row"><span class="s-code">SWE 10</span><span class="s-name">Jesper Karlström</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇹🇳</span>
+    <span class="team-name">Tunisia</span>
+    <span class="team-progress-text">6/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:30%"></div></div>
+    <span class="complete-badge">6 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">TUN 3</span><span class="s-name">Aymen Dahmen</span></div><div class="sticker-row owned-row"><span class="s-code">TUN 4</span><span class="s-name">Yan Valery</span></div><div class="sticker-row owned-row"><span class="s-code">TUN 11</span><span class="s-name">Ferjani Sassi</span></div><div class="sticker-row owned-row"><span class="s-code">TUN 12</span><span class="s-name">Mohamed Ali Ben Romdhane</span></div><div class="sticker-row owned-row"><span class="s-code">TUN 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row owned-row"><span class="s-code">TUN 14</span><span class="s-name">Player 14</span></div></div>
+</div></div><div class="group-block"><div class="group-label">Group G</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇮🇷</span>
+    <span class="team-name">Iran</span>
+    <span class="team-progress-text">2/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:10%"></div></div>
+    <span class="complete-badge">2 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">IRN 14</span><span class="s-name">Player 14</span></div><div class="sticker-row owned-row"><span class="s-code">IRN 15</span><span class="s-name">Omid Noorafkan</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇳🇿</span>
+    <span class="team-name">New Zealand</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="complete-badge">4 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">NZL 6</span><span class="s-name">Tim Payne</span></div><div class="sticker-row owned-row"><span class="s-code">NZL 10</span><span class="s-name">Joe Bell</span></div><div class="sticker-row owned-row"><span class="s-code">NZL 15</span><span class="s-name">Matthew Garbett</span></div><div class="sticker-row owned-row"><span class="s-code">NZL 20</span><span class="s-name">Callum McCowatt</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇧🇪</span>
+    <span class="team-name">Belgium</span>
+    <span class="team-progress-text">5/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:25%"></div></div>
+    <span class="complete-badge">5 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">BEL 3</span><span class="s-name">Arthur Theate</span></div><div class="sticker-row owned-row"><span class="s-code">BEL 4</span><span class="s-name">Timothy Castagne</span></div><div class="sticker-row owned-row"><span class="s-code">BEL 8</span><span class="s-name">Thomas Meunier</span></div><div class="sticker-row owned-row"><span class="s-code">BEL 11</span><span class="s-name">Nicolas Raskin</span></div><div class="sticker-row owned-row"><span class="s-code">BEL 15</span><span class="s-name">Hans Vanaken</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇪🇬</span>
+    <span class="team-name">Egypt</span>
+    <span class="team-progress-text">3/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:15%"></div></div>
+    <span class="complete-badge">3 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">EGY 6</span><span class="s-name">Khaled Sobhi</span></div><div class="sticker-row owned-row"><span class="s-code">EGY 12</span><span class="s-name">Hamdy Fathy</span></div><div class="sticker-row owned-row"><span class="s-code">EGY 15</span><span class="s-name">Mohamed Lasheen</span></div></div>
+</div></div><div class="group-block"><div class="group-label">Group H</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇪🇸</span>
+    <span class="team-name">Spain</span>
+    <span class="team-progress-text">1/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:5%"></div></div>
+    <span class="complete-badge">1 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">ESP 3</span><span class="s-name">Robin Le Normand</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇨🇻</span>
+    <span class="team-name">Cape Verde</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="complete-badge">4 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">CPV 4</span><span class="s-name">Pico</span></div><div class="sticker-row owned-row"><span class="s-code">CPV 8</span><span class="s-name">Joao Paulo</span></div><div class="sticker-row owned-row"><span class="s-code">CPV 11</span><span class="s-name">Patrick Andrade</span></div><div class="sticker-row owned-row"><span class="s-code">CPV 14</span><span class="s-name">Player 14</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇸🇦</span>
+    <span class="team-name">Saudi Arabia</span>
+    <span class="team-progress-text">1/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:5%"></div></div>
+    <span class="complete-badge">1 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">KSA 9</span><span class="s-name">Musab Aljuwayr</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇺🇾</span>
+    <span class="team-name">Uruguay</span>
+    <span class="team-progress-text">3/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:15%"></div></div>
+    <span class="complete-badge">3 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">URU 3</span><span class="s-name">Santiago Mele</span></div><div class="sticker-row owned-row"><span class="s-code">URU 10</span><span class="s-name">Federico Valverde</span></div><div class="sticker-row owned-row"><span class="s-code">URU 13</span><span class="s-name">Team Photo</span></div></div>
+</div></div><div class="group-block"><div class="group-label">Group I</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇫🇷</span>
+    <span class="team-name">France</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="complete-badge">4 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">FRA 4</span><span class="s-name">William Saliba</span></div><div class="sticker-row owned-row"><span class="s-code">FRA 9</span><span class="s-name">Aurélien Tchouaméni</span></div><div class="sticker-row owned-row"><span class="s-code">FRA 12</span><span class="s-name">Adrien Rabiot</span></div><div class="sticker-row owned-row"><span class="s-code">FRA 15</span><span class="s-name">Michael Olise</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇸🇳</span>
+    <span class="team-name">Senegal</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="complete-badge">4 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">SEN 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row owned-row"><span class="s-code">SEN 10</span><span class="s-name">Pape Matar Sarr</span></div><div class="sticker-row owned-row"><span class="s-code">SEN 11</span><span class="s-name">Pape Gueye</span></div><div class="sticker-row owned-row"><span class="s-code">SEN 19</span><span class="s-name">Iliman Ndiaye</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇮🇶</span>
+    <span class="team-name">Iraq</span>
+    <span class="team-progress-text">0/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:0%"></div></div>
+    <span class="missing-count">0 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="all-good" style="color:var(--muted)">None yet</div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇳🇴</span>
+    <span class="team-name">Norway</span>
+    <span class="team-progress-text">3/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:15%"></div></div>
+    <span class="complete-badge">3 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">NOR 6</span><span class="s-name">Marcus Holmgren Pedersen</span></div><div class="sticker-row owned-row"><span class="s-code">NOR 12</span><span class="s-name">Andreas Schjelderup</span></div><div class="sticker-row owned-row"><span class="s-code">NOR 15</span><span class="s-name">Patrick Berg</span></div></div>
+</div></div><div class="group-block"><div class="group-label">Group J</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇦🇷</span>
+    <span class="team-name">Argentina</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="complete-badge">4 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">ARG 5</span><span class="s-name">Nicolas Otamendi</span></div><div class="sticker-row owned-row"><span class="s-code">ARG 6</span><span class="s-name">Nicolas Tagliafico</span></div><div class="sticker-row owned-row"><span class="s-code">ARG 9</span><span class="s-name">Alexis Mac Allister</span></div><div class="sticker-row owned-row"><span class="s-code">ARG 12</span><span class="s-name">Leandro Paredes</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇩🇿</span>
+    <span class="team-name">Algeria</span>
+    <span class="team-progress-text">3/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:15%"></div></div>
+    <span class="complete-badge">3 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">ALG 3</span><span class="s-name">Ramy Bensebaini</span></div><div class="sticker-row owned-row"><span class="s-code">ALG 15</span><span class="s-name">Farés Chaibi</span></div><div class="sticker-row owned-row"><span class="s-code">ALG 19</span><span class="s-name">Amine Gouiri</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇦🇹</span>
+    <span class="team-name">Austria</span>
+    <span class="team-progress-text">2/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:10%"></div></div>
+    <span class="complete-badge">2 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">AUT 3</span><span class="s-name">Patrick Pentz</span></div><div class="sticker-row owned-row"><span class="s-code">AUT 19</span><span class="s-name">Christoph Baumgartner</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇯🇴</span>
+    <span class="team-name">Jordan</span>
+    <span class="team-progress-text">2/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:10%"></div></div>
+    <span class="complete-badge">2 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">JOR 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row owned-row"><span class="s-code">JOR 13</span><span class="s-name">Team Photo</span></div></div>
+</div></div><div class="group-block"><div class="group-label">Group K</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇵🇹</span>
+    <span class="team-name">Portugal</span>
+    <span class="team-progress-text">5/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:25%"></div></div>
+    <span class="complete-badge">5 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">POR 7</span><span class="s-name">Nuno Mendes</span></div><div class="sticker-row owned-row"><span class="s-code">POR 8</span><span class="s-name">Gonçalo Inácio</span></div><div class="sticker-row owned-row"><span class="s-code">POR 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row owned-row"><span class="s-code">POR 15</span><span class="s-name">João Neves</span></div><div class="sticker-row owned-row"><span class="s-code">POR 20</span><span class="s-name">Pedro Neto</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇨🇩</span>
+    <span class="team-name">Congo DR</span>
+    <span class="team-progress-text">1/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:5%"></div></div>
+    <span class="complete-badge">1 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">COD 5</span><span class="s-name">Arthur Masuaku</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇺🇿</span>
+    <span class="team-name">Uzbekistan</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="complete-badge">4 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">UZB 4</span><span class="s-name">Sherzod Nasrullaev</span></div><div class="sticker-row owned-row"><span class="s-code">UZB 7</span><span class="s-name">Rustamjon Ashurmatov</span></div><div class="sticker-row owned-row"><span class="s-code">UZB 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row owned-row"><span class="s-code">UZB 16</span><span class="s-name">Khojimat Erkinov</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇨🇴</span>
+    <span class="team-name">Colombia</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="complete-badge">4 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">COL 10</span><span class="s-name">Jefferson Lerma</span></div><div class="sticker-row owned-row"><span class="s-code">COL 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row owned-row"><span class="s-code">COL 15</span><span class="s-name">James Rodriguez</span></div><div class="sticker-row owned-row"><span class="s-code">COL 16</span><span class="s-name">Juan Fernando Quintero</span></div></div>
+</div></div><div class="group-block"><div class="group-label">Group L</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
+    <span class="team-name">England</span>
+    <span class="team-progress-text">2/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:10%"></div></div>
+    <span class="complete-badge">2 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">ENG 3</span><span class="s-name">John Stones</span></div><div class="sticker-row owned-row"><span class="s-code">ENG 5</span><span class="s-name">Ezri Konsa</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇭🇷</span>
+    <span class="team-name">Croatia</span>
+    <span class="team-progress-text">5/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:25%"></div></div>
+    <span class="complete-badge">5 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">CRO 3</span><span class="s-name">Duje Caleta-Car</span></div><div class="sticker-row owned-row"><span class="s-code">CRO 4</span><span class="s-name">Josko Gvardiol</span></div><div class="sticker-row owned-row"><span class="s-code">CRO 12</span><span class="s-name">Lovro Majer</span></div><div class="sticker-row owned-row"><span class="s-code">CRO 15</span><span class="s-name">Mario Pasalic</span></div><div class="sticker-row owned-row"><span class="s-code">CRO 20</span><span class="s-name">Andrej Kramarić</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇬🇭</span>
+    <span class="team-name">Ghana</span>
+    <span class="team-progress-text">3/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:15%"></div></div>
+    <span class="complete-badge">3 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">GHA 3</span><span class="s-name">Tariq Lamptey</span></div><div class="sticker-row owned-row"><span class="s-code">GHA 5</span><span class="s-name">Alidu Seidu</span></div><div class="sticker-row owned-row"><span class="s-code">GHA 9</span><span class="s-name">Abdul Issahaku Fatawu</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇵🇦</span>
+    <span class="team-name">Panama</span>
+    <span class="team-progress-text">2/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:10%"></div></div>
+    <span class="complete-badge">2 owned</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row owned-row"><span class="s-code">PAN 3</span><span class="s-name">Luis Mejia</span></div><div class="sticker-row owned-row"><span class="s-code">PAN 13</span><span class="s-name">Team Photo</span></div></div>
+</div></div>
+  </div>
   <div id="tab-extras" class="tab-panel">
     <p class="empty-state">No extras scanned yet.<br>Drop photos of your duplicate stickers in <code>images/inbox/</code> and run scan.py</p>
   </div>
 </div>
 
-<div class="footer">Generated Jun 11, 2026 14:06 &nbsp;·&nbsp; Panini FIFA World Cup 2026 Tracker</div>
+<div class="footer">Generated Jun 11, 2026 14:18 &nbsp;·&nbsp; Panini FIFA World Cup 2026 Tracker</div>
 
 <script>
 function switchTab(name, btn) {
@@ -859,29 +1393,28 @@ function doSearch(q) {
     document.querySelectorAll('.team-header').forEach(el => el.classList.remove('open'));
     return;
   }
-  // Search sticker rows
-  document.querySelectorAll('.team-block').forEach(block => {
-    const rows = block.querySelectorAll('.sticker-row');
-    let anyMatch = false;
-    rows.forEach(row => {
-      const txt = row.textContent.toLowerCase();
-      const match = txt.includes(q);
-      row.classList.toggle('hidden', !match);
-      if (match) anyMatch = true;
+  document.querySelectorAll('.tab-panel').forEach(panel => {
+    panel.querySelectorAll('.team-block').forEach(block => {
+      const rows = block.querySelectorAll('.sticker-row');
+      let anyMatch = false;
+      rows.forEach(row => {
+        const txt = row.textContent.toLowerCase();
+        const match = txt.includes(q);
+        row.classList.toggle('hidden', !match);
+        if (match) anyMatch = true;
+      });
+      const teamTxt = block.querySelector('.team-name')?.textContent.toLowerCase() || '';
+      if (teamTxt.includes(q)) {
+        rows.forEach(r => r.classList.remove('hidden'));
+        anyMatch = true;
+      }
+      block.classList.toggle('hidden', !anyMatch);
+      if (anyMatch) {
+        block.querySelector('.team-stickers')?.classList.remove('collapsed');
+        block.querySelector('.team-header')?.classList.add('open');
+      }
     });
-    // Also check team name
-    const teamTxt = block.querySelector('.team-name')?.textContent.toLowerCase() || '';
-    if (teamTxt.includes(q)) {
-      rows.forEach(r => r.classList.remove('hidden'));
-      anyMatch = true;
-    }
-    block.classList.toggle('hidden', !anyMatch);
-    if (anyMatch) {
-      block.querySelector('.team-stickers')?.classList.remove('collapsed');
-      block.querySelector('.team-header')?.classList.add('open');
-    }
   });
-  // Search extras
   document.querySelectorAll('.extra-card').forEach(card => {
     card.classList.toggle('hidden', !card.textContent.toLowerCase().includes(q));
   });
