@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>⚽ WC 2026 Collection</title>
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #131929;
+    --surface2: #1c2438;
+    --accent: #00c9ff;
+    --green: #22c55e;
+    --yellow: #fbbf24;
+    --red: #f87171;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --foil: #ffd700;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #0f2044 0%, #1a3a6e 100%);
+    padding: 20px 16px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  }
+  .header-title {
+    font-size: 22px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .header-title span { color: var(--accent); }
+  .pct-label {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .main-bar-bg {
+    height: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .main-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--green));
+    border-radius: 4px;
+    transition: width 0.8s ease;
+  }
+  .stats-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .stat-chip {
+    background: rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .stat-chip .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-green { background: var(--green); }
+  .dot-red { background: var(--red); }
+  .dot-yellow { background: var(--yellow); }
+
+  /* Search */
+  .search-wrap {
+    padding: 10px 16px 0;
+    position: sticky;
+    top: 145px;
+    z-index: 99;
+    background: var(--bg);
+  }
+  .search-box {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--surface2);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-size: 15px;
+    outline: none;
+  }
+  .search-box::placeholder { color: var(--muted); }
+  .search-box:focus { border-color: var(--accent); }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    padding: 10px 16px 0;
+    gap: 4px;
+    position: sticky;
+    top: 200px;
+    background: var(--bg);
+    z-index: 98;
+  }
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 9px 4px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--muted);
+    background: none;
+    border: none;
+    transition: all 0.2s;
+  }
+  .tab.active {
+    background: var(--surface2);
+    color: var(--accent);
+  }
+
+  /* Content */
+  .content { padding: 10px 16px 40px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Group block */
+  .group-block { margin-bottom: 8px; }
+  .group-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    padding: 10px 4px 4px;
+  }
+
+  /* Team block */
+  .team-block {
+    background: var(--surface);
+    border-radius: var(--radius);
+    margin-bottom: 6px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .team-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .team-header:active { background: var(--surface2); }
+  .team-flag { font-size: 20px; flex-shrink: 0; }
+  .team-name { flex: 1; font-size: 15px; font-weight: 600; min-width: 0; }
+  .team-progress-text { font-size: 12px; color: var(--muted); flex-shrink: 0; }
+  .team-bar-wrap { width: 48px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; flex-shrink: 0; }
+  .team-bar { height: 100%; background: var(--green); border-radius: 2px; }
+  .missing-count { font-size: 12px; color: var(--red); flex-shrink: 0; }
+  .complete-badge { font-size: 12px; color: var(--green); flex-shrink: 0; }
+  .chevron {
+    color: var(--muted);
+    font-size: 18px;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .team-header.open .chevron { transform: rotate(90deg); }
+
+  /* Sticker rows */
+  .team-stickers { background: var(--surface2); }
+  .team-stickers.collapsed { display: none; }
+  .sticker-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    font-size: 14px;
+  }
+  .s-code { color: var(--accent); font-weight: 600; width: 54px; flex-shrink: 0; font-size: 13px; }
+  .s-name { flex: 1; color: var(--text); }
+  .foil-badge {
+    background: linear-gradient(90deg, #ffd700, #ffaa00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 11px;
+    font-weight: 700;
+    margin-left: 4px;
+  }
+  .all-good { padding: 10px 14px; color: var(--green); font-size: 13px; }
+
+  /* Extras grid */
+  .extras-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 8px;
+    padding-top: 8px;
+  }
+  .extra-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+  }
+  .extra-code { font-size: 16px; font-weight: 700; color: var(--accent); }
+  .extra-team { font-size: 12px; color: var(--muted); margin: 2px 0; }
+  .extra-player { font-size: 13px; color: var(--text); }
+  .extra-qty {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--yellow);
+    color: #000;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 2px 6px;
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    color: var(--muted);
+    padding: 40px 20px;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .empty-state code {
+    background: var(--surface2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--accent);
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 11px;
+    padding: 20px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  /* Search highlight */
+  .hidden { display: none !important; }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --surface2: #f8fafc;
+      --text: #1e293b;
+      --muted: #94a3b8;
+    }
+    .header { background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white; }
+    .search-wrap { background: var(--bg); }
+    .tabs { background: var(--bg); }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">⚽ <span>WC 2026</span> Collection</div>
+  <div class="pct-label">162 / 980 stickers &nbsp;·&nbsp; 16.5% complete</div>
+  <div class="main-bar-bg">
+    <div class="main-bar-fill" style="width:16.5%"></div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-chip"><div class="dot dot-green"></div>162 owned</div>
+    <div class="stat-chip"><div class="dot dot-red"></div>818 missing</div>
+    <div class="stat-chip"><div class="dot dot-yellow"></div>0 extras (0 types)</div>
+  </div>
+</div>
+
+<div class="search-wrap">
+  <input class="search-box" type="search" placeholder="Search player, team, code…" oninput="doSearch(this.value)" />
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('missing', this)">Missing (818)</button>
+  <button class="tab" onclick="switchTab('extras', this)">Extras (0)</button>
+</div>
+
+<div class="content">
+  <div id="tab-missing" class="tab-panel active">
+    <div class="group-block"><div class="group-label">Group A</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇲🇽</span>
+    <span class="team-name">Mexico</span>
+    <span class="team-progress-text">2/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:10%"></div></div>
+    <span class="missing-count">18 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">MEX 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">MEX 2</span><span class="s-name">Luis Malagón</span></div><div class="sticker-row"><span class="s-code">MEX 3</span><span class="s-name">Johan Vasquez</span></div><div class="sticker-row"><span class="s-code">MEX 4</span><span class="s-name">Jorge Sánchez</span></div><div class="sticker-row"><span class="s-code">MEX 5</span><span class="s-name">Cesar Montes</span></div><div class="sticker-row"><span class="s-code">MEX 6</span><span class="s-name">Jesus Gallardo</span></div><div class="sticker-row"><span class="s-code">MEX 7</span><span class="s-name">Israel Reyes</span></div><div class="sticker-row"><span class="s-code">MEX 8</span><span class="s-name">Diego Lainez</span></div><div class="sticker-row"><span class="s-code">MEX 9</span><span class="s-name">Carlos Rodriguez</span></div><div class="sticker-row"><span class="s-code">MEX 11</span><span class="s-name">Orbelin Pineda</span></div><div class="sticker-row"><span class="s-code">MEX 12</span><span class="s-name">Marcel Ruiz</span></div><div class="sticker-row"><span class="s-code">MEX 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">MEX 15</span><span class="s-name">Érick Sánchez</span></div><div class="sticker-row"><span class="s-code">MEX 16</span><span class="s-name">Hirving Lozano</span></div><div class="sticker-row"><span class="s-code">MEX 17</span><span class="s-name">Santiago Giménez</span></div><div class="sticker-row"><span class="s-code">MEX 18</span><span class="s-name">Raúl Jiménez</span></div><div class="sticker-row"><span class="s-code">MEX 19</span><span class="s-name">Alexis Vega</span></div><div class="sticker-row"><span class="s-code">MEX 20</span><span class="s-name">Roberto Alvarado</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇨🇿</span>
+    <span class="team-name">Czechia</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="missing-count">16 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">CZE 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">CZE 2</span><span class="s-name">Matej Kovar</span></div><div class="sticker-row"><span class="s-code">CZE 4</span><span class="s-name">Ladislav Krejci</span></div><div class="sticker-row"><span class="s-code">CZE 5</span><span class="s-name">Vladimir Coufal</span></div><div class="sticker-row"><span class="s-code">CZE 6</span><span class="s-name">Jaroslav Zeleny</span></div><div class="sticker-row"><span class="s-code">CZE 7</span><span class="s-name">Tomas Holes</span></div><div class="sticker-row"><span class="s-code">CZE 8</span><span class="s-name">David Zima</span></div><div class="sticker-row"><span class="s-code">CZE 10</span><span class="s-name">Lukas Provod</span></div><div class="sticker-row"><span class="s-code">CZE 11</span><span class="s-name">Lukas Cerv</span></div><div class="sticker-row"><span class="s-code">CZE 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">CZE 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">CZE 15</span><span class="s-name">Pavel Sulc</span></div><div class="sticker-row"><span class="s-code">CZE 16</span><span class="s-name">Matej Vydra</span></div><div class="sticker-row"><span class="s-code">CZE 17</span><span class="s-name">Vasil Kusej</span></div><div class="sticker-row"><span class="s-code">CZE 19</span><span class="s-name">Vaclav Cerny</span></div><div class="sticker-row"><span class="s-code">CZE 20</span><span class="s-name">Adam Hlozek</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇿🇦</span>
+    <span class="team-name">South Africa</span>
+    <span class="team-progress-text">3/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:15%"></div></div>
+    <span class="missing-count">17 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">RSA 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">RSA 3</span><span class="s-name">Sipho Chaine</span></div><div class="sticker-row"><span class="s-code">RSA 4</span><span class="s-name">Aubrey Modiba</span></div><div class="sticker-row"><span class="s-code">RSA 5</span><span class="s-name">Samukele Kabini</span></div><div class="sticker-row"><span class="s-code">RSA 6</span><span class="s-name">Mbekezeli Mbokazi</span></div><div class="sticker-row"><span class="s-code">RSA 7</span><span class="s-name">Khulumani Ndamane</span></div><div class="sticker-row"><span class="s-code">RSA 8</span><span class="s-name">Siyabonga Ngezana</span></div><div class="sticker-row"><span class="s-code">RSA 9</span><span class="s-name">Khuliso Mudau</span></div><div class="sticker-row"><span class="s-code">RSA 10</span><span class="s-name">Nkosinathi Sibisi</span></div><div class="sticker-row"><span class="s-code">RSA 11</span><span class="s-name">Teboho Mokoena</span></div><div class="sticker-row"><span class="s-code">RSA 12</span><span class="s-name">Thalente Mbatha</span></div><div class="sticker-row"><span class="s-code">RSA 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">RSA 15</span><span class="s-name">Bathasi Aubaas</span></div><div class="sticker-row"><span class="s-code">RSA 16</span><span class="s-name">Yaya Sithole</span></div><div class="sticker-row"><span class="s-code">RSA 18</span><span class="s-name">Lyle Foster</span></div><div class="sticker-row"><span class="s-code">RSA 19</span><span class="s-name">Iqraam Rayners</span></div><div class="sticker-row"><span class="s-code">RSA 20</span><span class="s-name">Mohau Nkota</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇰🇷</span>
+    <span class="team-name">South Korea</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="missing-count">16 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">KOR 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">KOR 2</span><span class="s-name">Hyeon-woo Jo</span></div><div class="sticker-row"><span class="s-code">KOR 5</span><span class="s-name">Yu-min Cho</span></div><div class="sticker-row"><span class="s-code">KOR 6</span><span class="s-name">Young-woo Seol</span></div><div class="sticker-row"><span class="s-code">KOR 9</span><span class="s-name">Myung-jae Lee</span></div><div class="sticker-row"><span class="s-code">KOR 10</span><span class="s-name">Jae-sung Lee</span></div><div class="sticker-row"><span class="s-code">KOR 11</span><span class="s-name">In-beom Hwang</span></div><div class="sticker-row"><span class="s-code">KOR 12</span><span class="s-name">Kang-in Lee</span></div><div class="sticker-row"><span class="s-code">KOR 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">KOR 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">KOR 15</span><span class="s-name">Seung-ho Paik</span></div><div class="sticker-row"><span class="s-code">KOR 16</span><span class="s-name">Jens Castrop</span></div><div class="sticker-row"><span class="s-code">KOR 17</span><span class="s-name">Dongg-yeong Lee</span></div><div class="sticker-row"><span class="s-code">KOR 18</span><span class="s-name">Gue-sung Cho</span></div><div class="sticker-row"><span class="s-code">KOR 19</span><span class="s-name">Heung-min Son</span></div><div class="sticker-row"><span class="s-code">KOR 20</span><span class="s-name">Hee-chan Hwang</span></div></div>
+</div></div><div class="group-block"><div class="group-label">Group B</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇨🇦</span>
+    <span class="team-name">Canada</span>
+    <span class="team-progress-text">6/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:30%"></div></div>
+    <span class="missing-count">14 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">CAN 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">CAN 2</span><span class="s-name">Dayne St.Clair</span></div><div class="sticker-row"><span class="s-code">CAN 5</span><span class="s-name">Samuel Adekugbe</span></div><div class="sticker-row"><span class="s-code">CAN 6</span><span class="s-name">Riche Larvea</span></div><div class="sticker-row"><span class="s-code">CAN 7</span><span class="s-name">Derek Cornelius</span></div><div class="sticker-row"><span class="s-code">CAN 8</span><span class="s-name">Moïse Bombito</span></div><div class="sticker-row"><span class="s-code">CAN 10</span><span class="s-name">Stephen Eustáquio</span></div><div class="sticker-row"><span class="s-code">CAN 11</span><span class="s-name">Ismaël Koné</span></div><div class="sticker-row"><span class="s-code">CAN 12</span><span class="s-name">Jonathan Osorio</span></div><div class="sticker-row"><span class="s-code">CAN 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">CAN 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">CAN 15</span><span class="s-name">Jacob Shaffelburg</span></div><div class="sticker-row"><span class="s-code">CAN 16</span><span class="s-name">Mathieu Choinière</span></div><div class="sticker-row"><span class="s-code">CAN 18</span><span class="s-name">Tajon Buchanan</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇧🇦</span>
+    <span class="team-name">Bosnia & Herzegovina</span>
+    <span class="team-progress-text">2/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:10%"></div></div>
+    <span class="missing-count">18 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">BIH 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">BIH 2</span><span class="s-name">Nikola Vasilj</span></div><div class="sticker-row"><span class="s-code">BIH 3</span><span class="s-name">Amer Dedic</span></div><div class="sticker-row"><span class="s-code">BIH 4</span><span class="s-name">Sead Kolasinac</span></div><div class="sticker-row"><span class="s-code">BIH 5</span><span class="s-name">Tarik Muharemovic</span></div><div class="sticker-row"><span class="s-code">BIH 7</span><span class="s-name">Nikola Katic</span></div><div class="sticker-row"><span class="s-code">BIH 8</span><span class="s-name">Amir Hadziahmetovic</span></div><div class="sticker-row"><span class="s-code">BIH 9</span><span class="s-name">Benjamin Tahirovic</span></div><div class="sticker-row"><span class="s-code">BIH 10</span><span class="s-name">Armin Gigovic</span></div><div class="sticker-row"><span class="s-code">BIH 11</span><span class="s-name">Ivan Sunjic</span></div><div class="sticker-row"><span class="s-code">BIH 12</span><span class="s-name">Ivan Basic</span></div><div class="sticker-row"><span class="s-code">BIH 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">BIH 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">BIH 15</span><span class="s-name">Dzenis Burnic</span></div><div class="sticker-row"><span class="s-code">BIH 16</span><span class="s-name">Esmir Bajraktarevic</span></div><div class="sticker-row"><span class="s-code">BIH 17</span><span class="s-name">Amar Memic</span></div><div class="sticker-row"><span class="s-code">BIH 19</span><span class="s-name">Edin Dzeko</span></div><div class="sticker-row"><span class="s-code">BIH 20</span><span class="s-name">Samed Bazdar</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇶🇦</span>
+    <span class="team-name">Qatar</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="missing-count">16 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">QAT 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">QAT 2</span><span class="s-name">Meshaal Barsham</span></div><div class="sticker-row"><span class="s-code">QAT 3</span><span class="s-name">Sultan Albrake</span></div><div class="sticker-row"><span class="s-code">QAT 5</span><span class="s-name">Homam Ahmed</span></div><div class="sticker-row"><span class="s-code">QAT 6</span><span class="s-name">Boualem Khoukhi</span></div><div class="sticker-row"><span class="s-code">QAT 7</span><span class="s-name">Pedro Miguel</span></div><div class="sticker-row"><span class="s-code">QAT 8</span><span class="s-name">Tarek Salman</span></div><div class="sticker-row"><span class="s-code">QAT 11</span><span class="s-name">Assim Madibo</span></div><div class="sticker-row"><span class="s-code">QAT 12</span><span class="s-name">Ahmed Fatehi</span></div><div class="sticker-row"><span class="s-code">QAT 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">QAT 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">QAT 15</span><span class="s-name">Mohammed Waad</span></div><div class="sticker-row"><span class="s-code">QAT 16</span><span class="s-name">Abdulaziz Hatem</span></div><div class="sticker-row"><span class="s-code">QAT 17</span><span class="s-name">Hassan Al-Haydos</span></div><div class="sticker-row"><span class="s-code">QAT 19</span><span class="s-name">Akram Hassan Afif</span></div><div class="sticker-row"><span class="s-code">QAT 20</span><span class="s-name">Ahmed Al Ganehi</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇨🇭</span>
+    <span class="team-name">Switzerland</span>
+    <span class="team-progress-text">2/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:10%"></div></div>
+    <span class="missing-count">18 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">SUI 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">SUI 2</span><span class="s-name">Gregor Kobel</span></div><div class="sticker-row"><span class="s-code">SUI 3</span><span class="s-name">Yvon Mvogo</span></div><div class="sticker-row"><span class="s-code">SUI 4</span><span class="s-name">Manuel Akanji</span></div><div class="sticker-row"><span class="s-code">SUI 5</span><span class="s-name">Ricardo Rodriguez</span></div><div class="sticker-row"><span class="s-code">SUI 7</span><span class="s-name">Aurèle Amenda</span></div><div class="sticker-row"><span class="s-code">SUI 8</span><span class="s-name">Silvan Widmer</span></div><div class="sticker-row"><span class="s-code">SUI 9</span><span class="s-name">Granit Xhaka</span></div><div class="sticker-row"><span class="s-code">SUI 10</span><span class="s-name">Denis Zakaria</span></div><div class="sticker-row"><span class="s-code">SUI 11</span><span class="s-name">Remo Freuler</span></div><div class="sticker-row"><span class="s-code">SUI 12</span><span class="s-name">Fabian Rieder</span></div><div class="sticker-row"><span class="s-code">SUI 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">SUI 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">SUI 16</span><span class="s-name">Johan Manzambi</span></div><div class="sticker-row"><span class="s-code">SUI 17</span><span class="s-name">Michel Aebischer</span></div><div class="sticker-row"><span class="s-code">SUI 18</span><span class="s-name">Breel Embolo</span></div><div class="sticker-row"><span class="s-code">SUI 19</span><span class="s-name">Ruben Vargas</span></div><div class="sticker-row"><span class="s-code">SUI 20</span><span class="s-name">Dan Ndoye</span></div></div>
+</div></div><div class="group-block"><div class="group-label">Group C</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇧🇷</span>
+    <span class="team-name">Brazil</span>
+    <span class="team-progress-text">7/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:35%"></div></div>
+    <span class="missing-count">13 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">BRA 2</span><span class="s-name">Alisson</span></div><div class="sticker-row"><span class="s-code">BRA 3</span><span class="s-name">Bento</span></div><div class="sticker-row"><span class="s-code">BRA 5</span><span class="s-name">Éder Militão</span></div><div class="sticker-row"><span class="s-code">BRA 6</span><span class="s-name">Gabriel Magalhães</span></div><div class="sticker-row"><span class="s-code">BRA 7</span><span class="s-name">Danilo</span></div><div class="sticker-row"><span class="s-code">BRA 8</span><span class="s-name">Wesley</span></div><div class="sticker-row"><span class="s-code">BRA 9</span><span class="s-name">Lucas Paquetá</span></div><div class="sticker-row"><span class="s-code">BRA 10</span><span class="s-name">Casemiro</span></div><div class="sticker-row"><span class="s-code">BRA 12</span><span class="s-name">Luiz Henrique</span></div><div class="sticker-row"><span class="s-code">BRA 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">BRA 18</span><span class="s-name">Matheus Cunha</span></div><div class="sticker-row"><span class="s-code">BRA 19</span><span class="s-name">Gabriel Martinelli</span></div><div class="sticker-row"><span class="s-code">BRA 20</span><span class="s-name">Raphinha</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇲🇦</span>
+    <span class="team-name">Morocco</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="missing-count">16 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">MAR 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">MAR 2</span><span class="s-name">Yassine Bounou</span></div><div class="sticker-row"><span class="s-code">MAR 3</span><span class="s-name">Munir El Kajoui</span></div><div class="sticker-row"><span class="s-code">MAR 4</span><span class="s-name">Achraf Hakimi</span></div><div class="sticker-row"><span class="s-code">MAR 5</span><span class="s-name">Noussair Mazraoui</span></div><div class="sticker-row"><span class="s-code">MAR 6</span><span class="s-name">Nayef Aguerd</span></div><div class="sticker-row"><span class="s-code">MAR 7</span><span class="s-name">Roman Saiss</span></div><div class="sticker-row"><span class="s-code">MAR 8</span><span class="s-name">Jawad El Yamio</span></div><div class="sticker-row"><span class="s-code">MAR 9</span><span class="s-name">Adam Masina</span></div><div class="sticker-row"><span class="s-code">MAR 12</span><span class="s-name">Eliesse Ben Seghir</span></div><div class="sticker-row"><span class="s-code">MAR 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">MAR 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">MAR 16</span><span class="s-name">Ismael Saibari</span></div><div class="sticker-row"><span class="s-code">MAR 17</span><span class="s-name">Youssef En-Nesyri</span></div><div class="sticker-row"><span class="s-code">MAR 18</span><span class="s-name">Abde Ezzalzouli</span></div><div class="sticker-row"><span class="s-code">MAR 20</span><span class="s-name">Brahim Diaz</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇭🇹</span>
+    <span class="team-name">Haiti</span>
+    <span class="team-progress-text">3/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:15%"></div></div>
+    <span class="missing-count">17 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">HAI 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">HAI 2</span><span class="s-name">Johny Placide</span></div><div class="sticker-row"><span class="s-code">HAI 5</span><span class="s-name">Jean-Kevin Duverne</span></div><div class="sticker-row"><span class="s-code">HAI 6</span><span class="s-name">Ricardo Adé</span></div><div class="sticker-row"><span class="s-code">HAI 7</span><span class="s-name">Duke Lacroix</span></div><div class="sticker-row"><span class="s-code">HAI 8</span><span class="s-name">Garven Metusala</span></div><div class="sticker-row"><span class="s-code">HAI 9</span><span class="s-name">Hannes Delcroix</span></div><div class="sticker-row"><span class="s-code">HAI 10</span><span class="s-name">Leverton Pierre</span></div><div class="sticker-row"><span class="s-code">HAI 11</span><span class="s-name">Danley Jean Jacques</span></div><div class="sticker-row"><span class="s-code">HAI 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">HAI 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">HAI 15</span><span class="s-name">Christopher Attys</span></div><div class="sticker-row"><span class="s-code">HAI 16</span><span class="s-name">Derrick Etienne Jr</span></div><div class="sticker-row"><span class="s-code">HAI 17</span><span class="s-name">Josue Casimir</span></div><div class="sticker-row"><span class="s-code">HAI 18</span><span class="s-name">Ruben Providence</span></div><div class="sticker-row"><span class="s-code">HAI 19</span><span class="s-name">Duckens Nazon</span></div><div class="sticker-row"><span class="s-code">HAI 20</span><span class="s-name">Louicius Deedson</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>
+    <span class="team-name">Scotland</span>
+    <span class="team-progress-text">3/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:15%"></div></div>
+    <span class="missing-count">17 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">SCO 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">SCO 2</span><span class="s-name">Angus Gunn</span></div><div class="sticker-row"><span class="s-code">SCO 4</span><span class="s-name">Kieran Tierney</span></div><div class="sticker-row"><span class="s-code">SCO 5</span><span class="s-name">Aaron Hickey</span></div><div class="sticker-row"><span class="s-code">SCO 6</span><span class="s-name">Andrew Robertson</span></div><div class="sticker-row"><span class="s-code">SCO 7</span><span class="s-name">Scott McKenna</span></div><div class="sticker-row"><span class="s-code">SCO 8</span><span class="s-name">John Souttar</span></div><div class="sticker-row"><span class="s-code">SCO 9</span><span class="s-name">Anthony Ralston</span></div><div class="sticker-row"><span class="s-code">SCO 10</span><span class="s-name">Grant Hanley</span></div><div class="sticker-row"><span class="s-code">SCO 12</span><span class="s-name">Billy Gilmour</span></div><div class="sticker-row"><span class="s-code">SCO 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">SCO 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">SCO 15</span><span class="s-name">Lewis Ferguson</span></div><div class="sticker-row"><span class="s-code">SCO 16</span><span class="s-name">Ryan Christie</span></div><div class="sticker-row"><span class="s-code">SCO 18</span><span class="s-name">John McGinn</span></div><div class="sticker-row"><span class="s-code">SCO 19</span><span class="s-name">Lyndon Dykes</span></div><div class="sticker-row"><span class="s-code">SCO 20</span><span class="s-name">Che Adams</span></div></div>
+</div></div><div class="group-block"><div class="group-label">Group D</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇺🇸</span>
+    <span class="team-name">USA</span>
+    <span class="team-progress-text">5/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:25%"></div></div>
+    <span class="missing-count">15 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">USA 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">USA 2</span><span class="s-name">Matt Freese</span></div><div class="sticker-row"><span class="s-code">USA 3</span><span class="s-name">Chris Richards</span></div><div class="sticker-row"><span class="s-code">USA 4</span><span class="s-name">Tim Ream</span></div><div class="sticker-row"><span class="s-code">USA 5</span><span class="s-name">Mark McKenzie</span></div><div class="sticker-row"><span class="s-code">USA 6</span><span class="s-name">Alex Freeman</span></div><div class="sticker-row"><span class="s-code">USA 7</span><span class="s-name">Antonee Robinson</span></div><div class="sticker-row"><span class="s-code">USA 8</span><span class="s-name">Tyler Adams</span></div><div class="sticker-row"><span class="s-code">USA 9</span><span class="s-name">Tanner Tessmann</span></div><div class="sticker-row"><span class="s-code">USA 10</span><span class="s-name">Weston McKennie</span></div><div class="sticker-row"><span class="s-code">USA 11</span><span class="s-name">Christian Roldan</span></div><div class="sticker-row"><span class="s-code">USA 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">USA 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">USA 18</span><span class="s-name">Brenden Aaronson</span></div><div class="sticker-row"><span class="s-code">USA 20</span><span class="s-name">Haji Wright</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇵🇾</span>
+    <span class="team-name">Paraguay</span>
+    <span class="team-progress-text">3/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:15%"></div></div>
+    <span class="missing-count">17 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">PAR 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">PAR 2</span><span class="s-name">Roberto Fernandez</span></div><div class="sticker-row"><span class="s-code">PAR 3</span><span class="s-name">Orlando Gill</span></div><div class="sticker-row"><span class="s-code">PAR 4</span><span class="s-name">Gustavo Gomez</span></div><div class="sticker-row"><span class="s-code">PAR 5</span><span class="s-name">Fabián Balbuena</span></div><div class="sticker-row"><span class="s-code">PAR 7</span><span class="s-name">Omar Alderete</span></div><div class="sticker-row"><span class="s-code">PAR 8</span><span class="s-name">Junior Alonso</span></div><div class="sticker-row"><span class="s-code">PAR 10</span><span class="s-name">Diego Gomez</span></div><div class="sticker-row"><span class="s-code">PAR 11</span><span class="s-name">Damián Bobadilla</span></div><div class="sticker-row"><span class="s-code">PAR 12</span><span class="s-name">Andres Cubas</span></div><div class="sticker-row"><span class="s-code">PAR 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">PAR 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">PAR 16</span><span class="s-name">Julio Enciso</span></div><div class="sticker-row"><span class="s-code">PAR 17</span><span class="s-name">Alejandro Romero Gamarra</span></div><div class="sticker-row"><span class="s-code">PAR 18</span><span class="s-name">Miguel Almirón</span></div><div class="sticker-row"><span class="s-code">PAR 19</span><span class="s-name">Ramon Sosa</span></div><div class="sticker-row"><span class="s-code">PAR 20</span><span class="s-name">Angel Romero</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇦🇺</span>
+    <span class="team-name">Australia</span>
+    <span class="team-progress-text">5/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:25%"></div></div>
+    <span class="missing-count">15 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">AUS 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">AUS 2</span><span class="s-name">Mathew Ryan</span></div><div class="sticker-row"><span class="s-code">AUS 4</span><span class="s-name">Harry Souttar</span></div><div class="sticker-row"><span class="s-code">AUS 5</span><span class="s-name">Alessandro Circati</span></div><div class="sticker-row"><span class="s-code">AUS 6</span><span class="s-name">Jordan Bos</span></div><div class="sticker-row"><span class="s-code">AUS 7</span><span class="s-name">Aziz Behich</span></div><div class="sticker-row"><span class="s-code">AUS 9</span><span class="s-name">Lewis Miller</span></div><div class="sticker-row"><span class="s-code">AUS 10</span><span class="s-name">Milos Degenek</span></div><div class="sticker-row"><span class="s-code">AUS 11</span><span class="s-name">Jackson Irvine</span></div><div class="sticker-row"><span class="s-code">AUS 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">AUS 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">AUS 16</span><span class="s-name">Connor Metcalfe</span></div><div class="sticker-row"><span class="s-code">AUS 17</span><span class="s-name">Patrick Yazbek</span></div><div class="sticker-row"><span class="s-code">AUS 18</span><span class="s-name">Craig Goodwin</span></div><div class="sticker-row"><span class="s-code">AUS 19</span><span class="s-name">Kusini Vengi</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇹🇷</span>
+    <span class="team-name">Türkiye</span>
+    <span class="team-progress-text">3/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:15%"></div></div>
+    <span class="missing-count">17 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">TUR 2</span><span class="s-name">Ugurcan Cakir</span></div><div class="sticker-row"><span class="s-code">TUR 3</span><span class="s-name">Mert Muldur</span></div><div class="sticker-row"><span class="s-code">TUR 4</span><span class="s-name">Zeki Celik</span></div><div class="sticker-row"><span class="s-code">TUR 5</span><span class="s-name">Abdulkerim Bardakci</span></div><div class="sticker-row"><span class="s-code">TUR 6</span><span class="s-name">Caglar Soyuncu</span></div><div class="sticker-row"><span class="s-code">TUR 7</span><span class="s-name">Merih Demiral</span></div><div class="sticker-row"><span class="s-code">TUR 8</span><span class="s-name">Ferdi Kadioglu</span></div><div class="sticker-row"><span class="s-code">TUR 9</span><span class="s-name">Kaan Ayhan</span></div><div class="sticker-row"><span class="s-code">TUR 10</span><span class="s-name">Ismail Yuksek</span></div><div class="sticker-row"><span class="s-code">TUR 11</span><span class="s-name">Hakan Calhanoglu</span></div><div class="sticker-row"><span class="s-code">TUR 12</span><span class="s-name">Orkun Kokcu</span></div><div class="sticker-row"><span class="s-code">TUR 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">TUR 15</span><span class="s-name">Arda Guler</span></div><div class="sticker-row"><span class="s-code">TUR 16</span><span class="s-name">Irfan Can Kahveci</span></div><div class="sticker-row"><span class="s-code">TUR 18</span><span class="s-name">Can Uzun</span></div><div class="sticker-row"><span class="s-code">TUR 19</span><span class="s-name">Baris Alper Yilmaz</span></div><div class="sticker-row"><span class="s-code">TUR 20</span><span class="s-name">Kerem Akturkoglu</span></div></div>
+</div></div><div class="group-block"><div class="group-label">Group E</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇩🇪</span>
+    <span class="team-name">Germany</span>
+    <span class="team-progress-text">3/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:15%"></div></div>
+    <span class="missing-count">17 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">GER 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">GER 2</span><span class="s-name">Marc-André ter Stegen</span></div><div class="sticker-row"><span class="s-code">GER 3</span><span class="s-name">Jonathan Tah</span></div><div class="sticker-row"><span class="s-code">GER 4</span><span class="s-name">David Raum</span></div><div class="sticker-row"><span class="s-code">GER 6</span><span class="s-name">Antonio Rüdiger</span></div><div class="sticker-row"><span class="s-code">GER 7</span><span class="s-name">Waldemar Anton</span></div><div class="sticker-row"><span class="s-code">GER 8</span><span class="s-name">Ridle Baku</span></div><div class="sticker-row"><span class="s-code">GER 9</span><span class="s-name">Maximilian Mittelstadt</span></div><div class="sticker-row"><span class="s-code">GER 10</span><span class="s-name">Joshua Kimmich</span></div><div class="sticker-row"><span class="s-code">GER 11</span><span class="s-name">Florian Wirtz</span></div><div class="sticker-row"><span class="s-code">GER 12</span><span class="s-name">Felix Nmecha</span></div><div class="sticker-row"><span class="s-code">GER 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">GER 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">GER 15</span><span class="s-name">Leon Goretzka</span></div><div class="sticker-row"><span class="s-code">GER 17</span><span class="s-name">Serge Gnabry</span></div><div class="sticker-row"><span class="s-code">GER 19</span><span class="s-name">Leroy Sane</span></div><div class="sticker-row"><span class="s-code">GER 20</span><span class="s-name">Karim Adeyemi</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇨🇼</span>
+    <span class="team-name">Curaçao</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="missing-count">16 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">CUW 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">CUW 2</span><span class="s-name">Eloy Room</span></div><div class="sticker-row"><span class="s-code">CUW 3</span><span class="s-name">Armando Obispo</span></div><div class="sticker-row"><span class="s-code">CUW 5</span><span class="s-name">Jurien Gaari</span></div><div class="sticker-row"><span class="s-code">CUW 6</span><span class="s-name">Joshua Brenet</span></div><div class="sticker-row"><span class="s-code">CUW 7</span><span class="s-name">Roshon Van Eijma</span></div><div class="sticker-row"><span class="s-code">CUW 9</span><span class="s-name">Livano Comenencia</span></div><div class="sticker-row"><span class="s-code">CUW 10</span><span class="s-name">Godfried Roemeratoe</span></div><div class="sticker-row"><span class="s-code">CUW 11</span><span class="s-name">Juninho Bacuna</span></div><div class="sticker-row"><span class="s-code">CUW 12</span><span class="s-name">Leandro Bacuna</span></div><div class="sticker-row"><span class="s-code">CUW 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">CUW 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">CUW 15</span><span class="s-name">Tahith Chong</span></div><div class="sticker-row"><span class="s-code">CUW 16</span><span class="s-name">Kenji Gorre</span></div><div class="sticker-row"><span class="s-code">CUW 18</span><span class="s-name">Jurgen Locadia</span></div><div class="sticker-row"><span class="s-code">CUW 20</span><span class="s-name">Gervane Kastaneer</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇨🇮</span>
+    <span class="team-name">Ivory Coast</span>
+    <span class="team-progress-text">1/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:5%"></div></div>
+    <span class="missing-count">19 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">CIV 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">CIV 2</span><span class="s-name">Yahia Fofana</span></div><div class="sticker-row"><span class="s-code">CIV 3</span><span class="s-name">Ghislain Konan</span></div><div class="sticker-row"><span class="s-code">CIV 4</span><span class="s-name">Wilfried Singo</span></div><div class="sticker-row"><span class="s-code">CIV 6</span><span class="s-name">Evan Ndicka</span></div><div class="sticker-row"><span class="s-code">CIV 7</span><span class="s-name">Willy Boly</span></div><div class="sticker-row"><span class="s-code">CIV 8</span><span class="s-name">Emmanuel Agbadou</span></div><div class="sticker-row"><span class="s-code">CIV 9</span><span class="s-name">Ousmane Diomande</span></div><div class="sticker-row"><span class="s-code">CIV 10</span><span class="s-name">Franck Kessie</span></div><div class="sticker-row"><span class="s-code">CIV 11</span><span class="s-name">Seko Fofana</span></div><div class="sticker-row"><span class="s-code">CIV 12</span><span class="s-name">Ibrahim Sangare</span></div><div class="sticker-row"><span class="s-code">CIV 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">CIV 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">CIV 15</span><span class="s-name">Jean-Philippe Gbamin</span></div><div class="sticker-row"><span class="s-code">CIV 16</span><span class="s-name">Amad Diallo</span></div><div class="sticker-row"><span class="s-code">CIV 17</span><span class="s-name">Sébastien Haller</span></div><div class="sticker-row"><span class="s-code">CIV 18</span><span class="s-name">Simon Adingra</span></div><div class="sticker-row"><span class="s-code">CIV 19</span><span class="s-name">Yan Diomande</span></div><div class="sticker-row"><span class="s-code">CIV 20</span><span class="s-name">Evann Guessand</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇪🇨</span>
+    <span class="team-name">Ecuador</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="missing-count">16 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">ECU 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">ECU 2</span><span class="s-name">Hernán Galíndez</span></div><div class="sticker-row"><span class="s-code">ECU 3</span><span class="s-name">Gonzalo Valle</span></div><div class="sticker-row"><span class="s-code">ECU 4</span><span class="s-name">Piero Hincapié</span></div><div class="sticker-row"><span class="s-code">ECU 5</span><span class="s-name">Pervis Estupiñán</span></div><div class="sticker-row"><span class="s-code">ECU 6</span><span class="s-name">Willian Pacho</span></div><div class="sticker-row"><span class="s-code">ECU 7</span><span class="s-name">Ángelo Preciado</span></div><div class="sticker-row"><span class="s-code">ECU 8</span><span class="s-name">Joel Ordóñez</span></div><div class="sticker-row"><span class="s-code">ECU 12</span><span class="s-name">Pedro Vite</span></div><div class="sticker-row"><span class="s-code">ECU 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">ECU 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">ECU 16</span><span class="s-name">Leonardo Campana</span></div><div class="sticker-row"><span class="s-code">ECU 17</span><span class="s-name">Gonzalo Plata</span></div><div class="sticker-row"><span class="s-code">ECU 18</span><span class="s-name">Nilson Angulo</span></div><div class="sticker-row"><span class="s-code">ECU 19</span><span class="s-name">Alan Minda</span></div><div class="sticker-row"><span class="s-code">ECU 20</span><span class="s-name">Kevin Rodriguez</span></div></div>
+</div></div><div class="group-block"><div class="group-label">Group F</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇳🇱</span>
+    <span class="team-name">Netherlands</span>
+    <span class="team-progress-text">2/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:10%"></div></div>
+    <span class="missing-count">18 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">NED 2</span><span class="s-name">Bart Verbruggen</span></div><div class="sticker-row"><span class="s-code">NED 3</span><span class="s-name">Virgil van Dijk</span></div><div class="sticker-row"><span class="s-code">NED 4</span><span class="s-name">Micky van de Ven</span></div><div class="sticker-row"><span class="s-code">NED 5</span><span class="s-name">Jurrien Timber</span></div><div class="sticker-row"><span class="s-code">NED 6</span><span class="s-name">Denzel Dumfries</span></div><div class="sticker-row"><span class="s-code">NED 7</span><span class="s-name">Nathan Aké</span></div><div class="sticker-row"><span class="s-code">NED 8</span><span class="s-name">Jeremie Frimpong</span></div><div class="sticker-row"><span class="s-code">NED 9</span><span class="s-name">Jan Paul van Hecke</span></div><div class="sticker-row"><span class="s-code">NED 10</span><span class="s-name">Tijjani Reijnders</span></div><div class="sticker-row"><span class="s-code">NED 11</span><span class="s-name">Ryan Gravenberch</span></div><div class="sticker-row"><span class="s-code">NED 12</span><span class="s-name">Teun Koopmeiners</span></div><div class="sticker-row"><span class="s-code">NED 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">NED 15</span><span class="s-name">Frenkie de Jong</span></div><div class="sticker-row"><span class="s-code">NED 16</span><span class="s-name">Xavi Simons</span></div><div class="sticker-row"><span class="s-code">NED 17</span><span class="s-name">Justin Kluivert</span></div><div class="sticker-row"><span class="s-code">NED 18</span><span class="s-name">Memphis Depay</span></div><div class="sticker-row"><span class="s-code">NED 19</span><span class="s-name">Donyell Malen</span></div><div class="sticker-row"><span class="s-code">NED 20</span><span class="s-name">Wout Weghorst</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇯🇵</span>
+    <span class="team-name">Japan</span>
+    <span class="team-progress-text">2/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:10%"></div></div>
+    <span class="missing-count">18 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">JPN 2</span><span class="s-name">Zion Suzuki</span></div><div class="sticker-row"><span class="s-code">JPN 3</span><span class="s-name">Henry Heroki Mochizuki</span></div><div class="sticker-row"><span class="s-code">JPN 4</span><span class="s-name">Ayumu Seko</span></div><div class="sticker-row"><span class="s-code">JPN 5</span><span class="s-name">Junnosuke Suzuki</span></div><div class="sticker-row"><span class="s-code">JPN 6</span><span class="s-name">Shogo Taniguchi</span></div><div class="sticker-row"><span class="s-code">JPN 7</span><span class="s-name">Tsuyoshi Watanabe</span></div><div class="sticker-row"><span class="s-code">JPN 8</span><span class="s-name">Kaishu Sano</span></div><div class="sticker-row"><span class="s-code">JPN 10</span><span class="s-name">Ao Tanaka</span></div><div class="sticker-row"><span class="s-code">JPN 11</span><span class="s-name">Daichi Kamada</span></div><div class="sticker-row"><span class="s-code">JPN 12</span><span class="s-name">Takefusa Kubo</span></div><div class="sticker-row"><span class="s-code">JPN 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">JPN 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">JPN 15</span><span class="s-name">Ritsu Doan</span></div><div class="sticker-row"><span class="s-code">JPN 16</span><span class="s-name">Keito Nakamura</span></div><div class="sticker-row"><span class="s-code">JPN 17</span><span class="s-name">Takumi Minamino</span></div><div class="sticker-row"><span class="s-code">JPN 18</span><span class="s-name">Shuto Machino</span></div><div class="sticker-row"><span class="s-code">JPN 19</span><span class="s-name">Junya Ito</span></div><div class="sticker-row"><span class="s-code">JPN 20</span><span class="s-name">Koki Ogawa</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇸🇪</span>
+    <span class="team-name">Sweden</span>
+    <span class="team-progress-text">2/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:10%"></div></div>
+    <span class="missing-count">18 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">SWE 2</span><span class="s-name">Victor Johansson</span></div><div class="sticker-row"><span class="s-code">SWE 3</span><span class="s-name">Isak Hien</span></div><div class="sticker-row"><span class="s-code">SWE 4</span><span class="s-name">Gabriel Gudmundsson</span></div><div class="sticker-row"><span class="s-code">SWE 5</span><span class="s-name">Emil Holm</span></div><div class="sticker-row"><span class="s-code">SWE 6</span><span class="s-name">Victor Nilsson Lindelöf</span></div><div class="sticker-row"><span class="s-code">SWE 7</span><span class="s-name">Gustaf Lagerbielke</span></div><div class="sticker-row"><span class="s-code">SWE 8</span><span class="s-name">Lucas Bergvall</span></div><div class="sticker-row"><span class="s-code">SWE 9</span><span class="s-name">Hugo Larsson</span></div><div class="sticker-row"><span class="s-code">SWE 11</span><span class="s-name">Yasin Ayari</span></div><div class="sticker-row"><span class="s-code">SWE 12</span><span class="s-name">Mattias Svanberg</span></div><div class="sticker-row"><span class="s-code">SWE 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">SWE 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">SWE 15</span><span class="s-name">Daniel Svensson</span></div><div class="sticker-row"><span class="s-code">SWE 16</span><span class="s-name">Ken Sema</span></div><div class="sticker-row"><span class="s-code">SWE 17</span><span class="s-name">Roony Bardghji</span></div><div class="sticker-row"><span class="s-code">SWE 18</span><span class="s-name">Dejan Kulusevski</span></div><div class="sticker-row"><span class="s-code">SWE 19</span><span class="s-name">Anthony Elanga</span></div><div class="sticker-row"><span class="s-code">SWE 20</span><span class="s-name">Alexander Isak</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇹🇳</span>
+    <span class="team-name">Tunisia</span>
+    <span class="team-progress-text">6/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:30%"></div></div>
+    <span class="missing-count">14 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">TUN 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">TUN 2</span><span class="s-name">Bechir Ben Said</span></div><div class="sticker-row"><span class="s-code">TUN 5</span><span class="s-name">Montassar Talbi</span></div><div class="sticker-row"><span class="s-code">TUN 6</span><span class="s-name">Yassine Meriah</span></div><div class="sticker-row"><span class="s-code">TUN 7</span><span class="s-name">Ali Abdi</span></div><div class="sticker-row"><span class="s-code">TUN 8</span><span class="s-name">Dylan Bronn</span></div><div class="sticker-row"><span class="s-code">TUN 9</span><span class="s-name">Ellyes Skhiri</span></div><div class="sticker-row"><span class="s-code">TUN 10</span><span class="s-name">Aissa Laidouni</span></div><div class="sticker-row"><span class="s-code">TUN 15</span><span class="s-name">Hannibal Mejbri</span></div><div class="sticker-row"><span class="s-code">TUN 16</span><span class="s-name">Elias Achouri</span></div><div class="sticker-row"><span class="s-code">TUN 17</span><span class="s-name">Elias Saad</span></div><div class="sticker-row"><span class="s-code">TUN 18</span><span class="s-name">Hazem Mastouri</span></div><div class="sticker-row"><span class="s-code">TUN 19</span><span class="s-name">Ismael Gharbi</span></div><div class="sticker-row"><span class="s-code">TUN 20</span><span class="s-name">Sayfallah Ltaief</span></div></div>
+</div></div><div class="group-block"><div class="group-label">Group G</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇮🇷</span>
+    <span class="team-name">Iran</span>
+    <span class="team-progress-text">2/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:10%"></div></div>
+    <span class="missing-count">18 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">IRN 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">IRN 2</span><span class="s-name">Alireza Beiranvand</span></div><div class="sticker-row"><span class="s-code">IRN 3</span><span class="s-name">Morteza Pouraliganji</span></div><div class="sticker-row"><span class="s-code">IRN 4</span><span class="s-name">Ehsan Hajsafi</span></div><div class="sticker-row"><span class="s-code">IRN 5</span><span class="s-name">Milad Mohammadi</span></div><div class="sticker-row"><span class="s-code">IRN 6</span><span class="s-name">Shojae Khalilzadeh</span></div><div class="sticker-row"><span class="s-code">IRN 7</span><span class="s-name">Ramin Rezaeian</span></div><div class="sticker-row"><span class="s-code">IRN 8</span><span class="s-name">Hossein Kanaani</span></div><div class="sticker-row"><span class="s-code">IRN 9</span><span class="s-name">Sadegh Moharrami</span></div><div class="sticker-row"><span class="s-code">IRN 10</span><span class="s-name">Saleh Hardani</span></div><div class="sticker-row"><span class="s-code">IRN 11</span><span class="s-name">Saeed Ezatolahi</span></div><div class="sticker-row"><span class="s-code">IRN 12</span><span class="s-name">Saman Ghoddos</span></div><div class="sticker-row"><span class="s-code">IRN 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">IRN 16</span><span class="s-name">Roozbeh Cheshmi</span></div><div class="sticker-row"><span class="s-code">IRN 17</span><span class="s-name">Mohammad Mohebi</span></div><div class="sticker-row"><span class="s-code">IRN 18</span><span class="s-name">Sardar Azmoun</span></div><div class="sticker-row"><span class="s-code">IRN 19</span><span class="s-name">Mehdi Taremi</span></div><div class="sticker-row"><span class="s-code">IRN 20</span><span class="s-name">Alireza Jahanbakhsh</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇳🇿</span>
+    <span class="team-name">New Zealand</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="missing-count">16 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">NZL 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">NZL 2</span><span class="s-name">Max Crocombe Payne</span></div><div class="sticker-row"><span class="s-code">NZL 3</span><span class="s-name">Alex Paulsen</span></div><div class="sticker-row"><span class="s-code">NZL 4</span><span class="s-name">Michael Boxall</span></div><div class="sticker-row"><span class="s-code">NZL 5</span><span class="s-name">Liberato Cacace</span></div><div class="sticker-row"><span class="s-code">NZL 7</span><span class="s-name">Tyler Bindon</span></div><div class="sticker-row"><span class="s-code">NZL 8</span><span class="s-name">Francis de Vries</span></div><div class="sticker-row"><span class="s-code">NZL 9</span><span class="s-name">Finn Surman</span></div><div class="sticker-row"><span class="s-code">NZL 11</span><span class="s-name">Sarpreet Singh</span></div><div class="sticker-row"><span class="s-code">NZL 12</span><span class="s-name">Ryan Thomas</span></div><div class="sticker-row"><span class="s-code">NZL 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">NZL 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">NZL 16</span><span class="s-name">Marko Stamenić</span></div><div class="sticker-row"><span class="s-code">NZL 17</span><span class="s-name">Ben Old</span></div><div class="sticker-row"><span class="s-code">NZL 18</span><span class="s-name">Chris Wood</span></div><div class="sticker-row"><span class="s-code">NZL 19</span><span class="s-name">Elijah Just</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇧🇪</span>
+    <span class="team-name">Belgium</span>
+    <span class="team-progress-text">5/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:25%"></div></div>
+    <span class="missing-count">15 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">BEL 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">BEL 2</span><span class="s-name">Thibaut Courtois</span></div><div class="sticker-row"><span class="s-code">BEL 5</span><span class="s-name">Zeno Debast</span></div><div class="sticker-row"><span class="s-code">BEL 6</span><span class="s-name">Brandon Mechele</span></div><div class="sticker-row"><span class="s-code">BEL 7</span><span class="s-name">Maxim De Cuyper</span></div><div class="sticker-row"><span class="s-code">BEL 9</span><span class="s-name">Youri Tielemans</span></div><div class="sticker-row"><span class="s-code">BEL 10</span><span class="s-name">Amadou Onana</span></div><div class="sticker-row"><span class="s-code">BEL 12</span><span class="s-name">Alexis Saelemaekers</span></div><div class="sticker-row"><span class="s-code">BEL 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">BEL 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">BEL 16</span><span class="s-name">Kevin De Bruyne</span></div><div class="sticker-row"><span class="s-code">BEL 17</span><span class="s-name">Jérémy Doku</span></div><div class="sticker-row"><span class="s-code">BEL 18</span><span class="s-name">Charles De Ketelaere</span></div><div class="sticker-row"><span class="s-code">BEL 19</span><span class="s-name">Leandro Trossard</span></div><div class="sticker-row"><span class="s-code">BEL 20</span><span class="s-name">Loïs Openda</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇪🇬</span>
+    <span class="team-name">Egypt</span>
+    <span class="team-progress-text">3/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:15%"></div></div>
+    <span class="missing-count">17 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">EGY 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">EGY 2</span><span class="s-name">Mohamed El Shenawy</span></div><div class="sticker-row"><span class="s-code">EGY 3</span><span class="s-name">Mohamed Hany</span></div><div class="sticker-row"><span class="s-code">EGY 4</span><span class="s-name">Mohamed Hamdy</span></div><div class="sticker-row"><span class="s-code">EGY 5</span><span class="s-name">Yasser Ibrahim</span></div><div class="sticker-row"><span class="s-code">EGY 7</span><span class="s-name">Ramy Rabia</span></div><div class="sticker-row"><span class="s-code">EGY 8</span><span class="s-name">Hossam Abdelmaguid</span></div><div class="sticker-row"><span class="s-code">EGY 9</span><span class="s-name">Ahmed Fatouh</span></div><div class="sticker-row"><span class="s-code">EGY 10</span><span class="s-name">Marwan Attia</span></div><div class="sticker-row"><span class="s-code">EGY 11</span><span class="s-name">Zizo</span></div><div class="sticker-row"><span class="s-code">EGY 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">EGY 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">EGY 16</span><span class="s-name">Emam Ashour</span></div><div class="sticker-row"><span class="s-code">EGY 17</span><span class="s-name">Osama Faisal</span></div><div class="sticker-row"><span class="s-code">EGY 18</span><span class="s-name">Mohamed Salah</span></div><div class="sticker-row"><span class="s-code">EGY 19</span><span class="s-name">Mostafa Mohamed</span></div><div class="sticker-row"><span class="s-code">EGY 20</span><span class="s-name">Trezeguet</span></div></div>
+</div></div><div class="group-block"><div class="group-label">Group H</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇪🇸</span>
+    <span class="team-name">Spain</span>
+    <span class="team-progress-text">1/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:5%"></div></div>
+    <span class="missing-count">19 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">ESP 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">ESP 2</span><span class="s-name">Unai Simon</span></div><div class="sticker-row"><span class="s-code">ESP 4</span><span class="s-name">Aymeric Laporte</span></div><div class="sticker-row"><span class="s-code">ESP 5</span><span class="s-name">Dean Huijsen</span></div><div class="sticker-row"><span class="s-code">ESP 6</span><span class="s-name">Pedro Porro</span></div><div class="sticker-row"><span class="s-code">ESP 7</span><span class="s-name">Dani Carvajal</span></div><div class="sticker-row"><span class="s-code">ESP 8</span><span class="s-name">Marc Cucurella</span></div><div class="sticker-row"><span class="s-code">ESP 9</span><span class="s-name">Martín Zubimendi</span></div><div class="sticker-row"><span class="s-code">ESP 10</span><span class="s-name">Rodri</span></div><div class="sticker-row"><span class="s-code">ESP 11</span><span class="s-name">Pedri</span></div><div class="sticker-row"><span class="s-code">ESP 12</span><span class="s-name">Fabian Ruiz</span></div><div class="sticker-row"><span class="s-code">ESP 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">ESP 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">ESP 15</span><span class="s-name">Mikel Merino</span></div><div class="sticker-row"><span class="s-code">ESP 16</span><span class="s-name">Lamine Yamal</span></div><div class="sticker-row"><span class="s-code">ESP 17</span><span class="s-name">Dani Olmo</span></div><div class="sticker-row"><span class="s-code">ESP 18</span><span class="s-name">Nico Williams</span></div><div class="sticker-row"><span class="s-code">ESP 19</span><span class="s-name">Ferran Torres</span></div><div class="sticker-row"><span class="s-code">ESP 20</span><span class="s-name">Álvaro Morata</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇨🇻</span>
+    <span class="team-name">Cape Verde</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="missing-count">16 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">CPV 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">CPV 2</span><span class="s-name">Vozinha</span></div><div class="sticker-row"><span class="s-code">CPV 3</span><span class="s-name">Logan Costa</span></div><div class="sticker-row"><span class="s-code">CPV 5</span><span class="s-name">Diney</span></div><div class="sticker-row"><span class="s-code">CPV 6</span><span class="s-name">Steven Moreira</span></div><div class="sticker-row"><span class="s-code">CPV 7</span><span class="s-name">Wagner Pina</span></div><div class="sticker-row"><span class="s-code">CPV 9</span><span class="s-name">Yannick Semedo</span></div><div class="sticker-row"><span class="s-code">CPV 10</span><span class="s-name">Kevin Pina</span></div><div class="sticker-row"><span class="s-code">CPV 12</span><span class="s-name">Jamiro Monteiro</span></div><div class="sticker-row"><span class="s-code">CPV 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">CPV 15</span><span class="s-name">Deroy Duarte</span></div><div class="sticker-row"><span class="s-code">CPV 16</span><span class="s-name">Garry Rodrigues</span></div><div class="sticker-row"><span class="s-code">CPV 17</span><span class="s-name">Jovane Cabral</span></div><div class="sticker-row"><span class="s-code">CPV 18</span><span class="s-name">Ryan Mendes</span></div><div class="sticker-row"><span class="s-code">CPV 19</span><span class="s-name">Dailon Livramento</span></div><div class="sticker-row"><span class="s-code">CPV 20</span><span class="s-name">Willy Semedo</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇸🇦</span>
+    <span class="team-name">Saudi Arabia</span>
+    <span class="team-progress-text">1/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:5%"></div></div>
+    <span class="missing-count">19 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">KSA 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">KSA 2</span><span class="s-name">Nawaf Alaqidi</span></div><div class="sticker-row"><span class="s-code">KSA 3</span><span class="s-name">Abdulrahman Al-Sanbi</span></div><div class="sticker-row"><span class="s-code">KSA 4</span><span class="s-name">Saud Abdulhamid</span></div><div class="sticker-row"><span class="s-code">KSA 5</span><span class="s-name">Nawaf Bouwashl</span></div><div class="sticker-row"><span class="s-code">KSA 6</span><span class="s-name">Jihad Thakri</span></div><div class="sticker-row"><span class="s-code">KSA 7</span><span class="s-name">Moteb Al-Harbi</span></div><div class="sticker-row"><span class="s-code">KSA 8</span><span class="s-name">Hassan Altambakti</span></div><div class="sticker-row"><span class="s-code">KSA 10</span><span class="s-name">Ziyad Aljohani</span></div><div class="sticker-row"><span class="s-code">KSA 11</span><span class="s-name">Abdullah Alkhaibari</span></div><div class="sticker-row"><span class="s-code">KSA 12</span><span class="s-name">Nasser Aldawsari</span></div><div class="sticker-row"><span class="s-code">KSA 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">KSA 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">KSA 15</span><span class="s-name">Saleh Abu Alshamat</span></div><div class="sticker-row"><span class="s-code">KSA 16</span><span class="s-name">Marwan Alsahafi</span></div><div class="sticker-row"><span class="s-code">KSA 17</span><span class="s-name">Salem Aldawsari</span></div><div class="sticker-row"><span class="s-code">KSA 18</span><span class="s-name">Abdulrahman Al-Aboud</span></div><div class="sticker-row"><span class="s-code">KSA 19</span><span class="s-name">Feras Akbrikan</span></div><div class="sticker-row"><span class="s-code">KSA 20</span><span class="s-name">Saleh Alshehri</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇺🇾</span>
+    <span class="team-name">Uruguay</span>
+    <span class="team-progress-text">3/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:15%"></div></div>
+    <span class="missing-count">17 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">URU 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">URU 2</span><span class="s-name">Sergio Rochet</span></div><div class="sticker-row"><span class="s-code">URU 4</span><span class="s-name">Ronald Araujo</span></div><div class="sticker-row"><span class="s-code">URU 5</span><span class="s-name">José María Giménez</span></div><div class="sticker-row"><span class="s-code">URU 6</span><span class="s-name">Sebastian Caceres</span></div><div class="sticker-row"><span class="s-code">URU 7</span><span class="s-name">Mathias Olivera</span></div><div class="sticker-row"><span class="s-code">URU 8</span><span class="s-name">Guillermo Varela</span></div><div class="sticker-row"><span class="s-code">URU 9</span><span class="s-name">Nahitan Nandez</span></div><div class="sticker-row"><span class="s-code">URU 11</span><span class="s-name">Giorgian De Arrascaeta</span></div><div class="sticker-row"><span class="s-code">URU 12</span><span class="s-name">Rodrigo Bentancur</span></div><div class="sticker-row"><span class="s-code">URU 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">URU 15</span><span class="s-name">Manuel Ugarte</span></div><div class="sticker-row"><span class="s-code">URU 16</span><span class="s-name">Nicolás de la Cruz</span></div><div class="sticker-row"><span class="s-code">URU 17</span><span class="s-name">Maxi Araujo</span></div><div class="sticker-row"><span class="s-code">URU 18</span><span class="s-name">Darwin Núñez</span></div><div class="sticker-row"><span class="s-code">URU 19</span><span class="s-name">Federico Viñas</span></div><div class="sticker-row"><span class="s-code">URU 20</span><span class="s-name">Rodrigo Aguirre</span></div></div>
+</div></div><div class="group-block"><div class="group-label">Group I</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇫🇷</span>
+    <span class="team-name">France</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="missing-count">16 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">FRA 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">FRA 2</span><span class="s-name">Mike Maignan</span></div><div class="sticker-row"><span class="s-code">FRA 3</span><span class="s-name">Theo Hernandez</span></div><div class="sticker-row"><span class="s-code">FRA 5</span><span class="s-name">Jules Kounde</span></div><div class="sticker-row"><span class="s-code">FRA 6</span><span class="s-name">Ibrahima Konate</span></div><div class="sticker-row"><span class="s-code">FRA 7</span><span class="s-name">Dayot Upamecano</span></div><div class="sticker-row"><span class="s-code">FRA 8</span><span class="s-name">Lucas Digne</span></div><div class="sticker-row"><span class="s-code">FRA 10</span><span class="s-name">Eduardo Camavinga</span></div><div class="sticker-row"><span class="s-code">FRA 11</span><span class="s-name">Manu Kone</span></div><div class="sticker-row"><span class="s-code">FRA 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">FRA 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">FRA 16</span><span class="s-name">Ousmane Dembele</span></div><div class="sticker-row"><span class="s-code">FRA 17</span><span class="s-name">Bradley Barcola</span></div><div class="sticker-row"><span class="s-code">FRA 18</span><span class="s-name">Désiré Doué</span></div><div class="sticker-row"><span class="s-code">FRA 19</span><span class="s-name">Kingsley Coman</span></div><div class="sticker-row"><span class="s-code">FRA 20</span><span class="s-name">Hugo Ekitike</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇸🇳</span>
+    <span class="team-name">Senegal</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="missing-count">16 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">SEN 2</span><span class="s-name">Edouard Mendy</span></div><div class="sticker-row"><span class="s-code">SEN 3</span><span class="s-name">Yehvann Diouf</span></div><div class="sticker-row"><span class="s-code">SEN 4</span><span class="s-name">Moussa Niakhaté</span></div><div class="sticker-row"><span class="s-code">SEN 5</span><span class="s-name">Abdoulaye Seck</span></div><div class="sticker-row"><span class="s-code">SEN 6</span><span class="s-name">Ismail Jakobs</span></div><div class="sticker-row"><span class="s-code">SEN 7</span><span class="s-name">El Hadji Malick Diouf</span></div><div class="sticker-row"><span class="s-code">SEN 8</span><span class="s-name">Kalidou Koulibaly</span></div><div class="sticker-row"><span class="s-code">SEN 9</span><span class="s-name">Idrissa Gana Gueye</span></div><div class="sticker-row"><span class="s-code">SEN 12</span><span class="s-name">Habib Diarra</span></div><div class="sticker-row"><span class="s-code">SEN 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">SEN 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">SEN 15</span><span class="s-name">Lamine Camara</span></div><div class="sticker-row"><span class="s-code">SEN 16</span><span class="s-name">Sadio Mane</span></div><div class="sticker-row"><span class="s-code">SEN 17</span><span class="s-name">Ismaïla Sarr</span></div><div class="sticker-row"><span class="s-code">SEN 18</span><span class="s-name">Boulaye Dia</span></div><div class="sticker-row"><span class="s-code">SEN 20</span><span class="s-name">Nicolas Jackson</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇮🇶</span>
+    <span class="team-name">Iraq</span>
+    <span class="team-progress-text">0/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:0%"></div></div>
+    <span class="missing-count">20 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">IRQ 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">IRQ 2</span><span class="s-name">Jalal Hassan</span></div><div class="sticker-row"><span class="s-code">IRQ 3</span><span class="s-name">Rebin Sulaka</span></div><div class="sticker-row"><span class="s-code">IRQ 4</span><span class="s-name">Hussein Ali</span></div><div class="sticker-row"><span class="s-code">IRQ 5</span><span class="s-name">Akam Hashem</span></div><div class="sticker-row"><span class="s-code">IRQ 6</span><span class="s-name">Merchas Doski</span></div><div class="sticker-row"><span class="s-code">IRQ 7</span><span class="s-name">Zaid Tahseen</span></div><div class="sticker-row"><span class="s-code">IRQ 8</span><span class="s-name">Manaf Younis</span></div><div class="sticker-row"><span class="s-code">IRQ 9</span><span class="s-name">Zidane Iqbal</span></div><div class="sticker-row"><span class="s-code">IRQ 10</span><span class="s-name">Amir Al-Ammari</span></div><div class="sticker-row"><span class="s-code">IRQ 11</span><span class="s-name">Ibrahim Bavesh</span></div><div class="sticker-row"><span class="s-code">IRQ 12</span><span class="s-name">Ali Jasim</span></div><div class="sticker-row"><span class="s-code">IRQ 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">IRQ 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">IRQ 15</span><span class="s-name">Youssef Amyn</span></div><div class="sticker-row"><span class="s-code">IRQ 16</span><span class="s-name">Aimar Sher</span></div><div class="sticker-row"><span class="s-code">IRQ 17</span><span class="s-name">Marko Farji</span></div><div class="sticker-row"><span class="s-code">IRQ 18</span><span class="s-name">Osama Rashid</span></div><div class="sticker-row"><span class="s-code">IRQ 19</span><span class="s-name">Ali Al-Hamadi</span></div><div class="sticker-row"><span class="s-code">IRQ 20</span><span class="s-name">Aymen Hussein</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇳🇴</span>
+    <span class="team-name">Norway</span>
+    <span class="team-progress-text">3/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:15%"></div></div>
+    <span class="missing-count">17 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">NOR 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">NOR 2</span><span class="s-name">Orjan Nyland</span></div><div class="sticker-row"><span class="s-code">NOR 3</span><span class="s-name">Julian Ryerson</span></div><div class="sticker-row"><span class="s-code">NOR 4</span><span class="s-name">Leo Ostigård</span></div><div class="sticker-row"><span class="s-code">NOR 5</span><span class="s-name">Kristoffer Vassbakk Ajer</span></div><div class="sticker-row"><span class="s-code">NOR 7</span><span class="s-name">David Møller Wolfe</span></div><div class="sticker-row"><span class="s-code">NOR 8</span><span class="s-name">Torbjørn Heggem</span></div><div class="sticker-row"><span class="s-code">NOR 9</span><span class="s-name">Morten Thorsby</span></div><div class="sticker-row"><span class="s-code">NOR 10</span><span class="s-name">Martin Ødegaard</span></div><div class="sticker-row"><span class="s-code">NOR 11</span><span class="s-name">Sander Berge</span></div><div class="sticker-row"><span class="s-code">NOR 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">NOR 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">NOR 16</span><span class="s-name">Erling Haaland</span></div><div class="sticker-row"><span class="s-code">NOR 17</span><span class="s-name">Alexander Sørloth</span></div><div class="sticker-row"><span class="s-code">NOR 18</span><span class="s-name">Aron Dønnum</span></div><div class="sticker-row"><span class="s-code">NOR 19</span><span class="s-name">Jorgen Strand Larsen</span></div><div class="sticker-row"><span class="s-code">NOR 20</span><span class="s-name">Antonio Nusa</span></div></div>
+</div></div><div class="group-block"><div class="group-label">Group J</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇦🇷</span>
+    <span class="team-name">Argentina</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="missing-count">16 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">ARG 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">ARG 2</span><span class="s-name">Emiliano Martinez</span></div><div class="sticker-row"><span class="s-code">ARG 3</span><span class="s-name">Nahuel Molina</span></div><div class="sticker-row"><span class="s-code">ARG 4</span><span class="s-name">Cristian Romero</span></div><div class="sticker-row"><span class="s-code">ARG 7</span><span class="s-name">Leonardo Balerdi</span></div><div class="sticker-row"><span class="s-code">ARG 8</span><span class="s-name">Enzo Fernandez</span></div><div class="sticker-row"><span class="s-code">ARG 10</span><span class="s-name">Rodrigo De Paul</span></div><div class="sticker-row"><span class="s-code">ARG 11</span><span class="s-name">Exequiel Palacios</span></div><div class="sticker-row"><span class="s-code">ARG 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">ARG 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">ARG 15</span><span class="s-name">Nico Paz</span></div><div class="sticker-row"><span class="s-code">ARG 16</span><span class="s-name">Franco Mastantuono</span></div><div class="sticker-row"><span class="s-code">ARG 17</span><span class="s-name">Nico Gonzalez</span></div><div class="sticker-row"><span class="s-code">ARG 18</span><span class="s-name">Lionel Messi</span></div><div class="sticker-row"><span class="s-code">ARG 19</span><span class="s-name">Lautaro Martinez</span></div><div class="sticker-row"><span class="s-code">ARG 20</span><span class="s-name">Julian Alvarez</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇩🇿</span>
+    <span class="team-name">Algeria</span>
+    <span class="team-progress-text">3/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:15%"></div></div>
+    <span class="missing-count">17 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">ALG 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">ALG 2</span><span class="s-name">Alexis Guendouz</span></div><div class="sticker-row"><span class="s-code">ALG 4</span><span class="s-name">Youcef Atal</span></div><div class="sticker-row"><span class="s-code">ALG 5</span><span class="s-name">Rayan Aït-Nouri</span></div><div class="sticker-row"><span class="s-code">ALG 6</span><span class="s-name">Mohamed Amine Tougai</span></div><div class="sticker-row"><span class="s-code">ALG 7</span><span class="s-name">Aïssa Mandi</span></div><div class="sticker-row"><span class="s-code">ALG 8</span><span class="s-name">Ismael Bennacer</span></div><div class="sticker-row"><span class="s-code">ALG 9</span><span class="s-name">Houssem Aquar</span></div><div class="sticker-row"><span class="s-code">ALG 10</span><span class="s-name">Hicham Boudaoui</span></div><div class="sticker-row"><span class="s-code">ALG 11</span><span class="s-name">Ramiz Zerrouki</span></div><div class="sticker-row"><span class="s-code">ALG 12</span><span class="s-name">Nabil Bentalab</span></div><div class="sticker-row"><span class="s-code">ALG 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">ALG 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">ALG 16</span><span class="s-name">Riyad Mahrez</span></div><div class="sticker-row"><span class="s-code">ALG 17</span><span class="s-name">Said Benrahma</span></div><div class="sticker-row"><span class="s-code">ALG 18</span><span class="s-name">Anis Hadj Moussa</span></div><div class="sticker-row"><span class="s-code">ALG 20</span><span class="s-name">Baghdad Bounedjah</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇦🇹</span>
+    <span class="team-name">Austria</span>
+    <span class="team-progress-text">2/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:10%"></div></div>
+    <span class="missing-count">18 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">AUT 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">AUT 2</span><span class="s-name">Alexander Schlager</span></div><div class="sticker-row"><span class="s-code">AUT 4</span><span class="s-name">David Alaba</span></div><div class="sticker-row"><span class="s-code">AUT 5</span><span class="s-name">Kevin Danso</span></div><div class="sticker-row"><span class="s-code">AUT 6</span><span class="s-name">Philipp Lienhart</span></div><div class="sticker-row"><span class="s-code">AUT 7</span><span class="s-name">Stefan Posch</span></div><div class="sticker-row"><span class="s-code">AUT 8</span><span class="s-name">Phillipp Mwene</span></div><div class="sticker-row"><span class="s-code">AUT 9</span><span class="s-name">Alexander Prass</span></div><div class="sticker-row"><span class="s-code">AUT 10</span><span class="s-name">Xaver Schlager</span></div><div class="sticker-row"><span class="s-code">AUT 11</span><span class="s-name">Marcel Sabitzer</span></div><div class="sticker-row"><span class="s-code">AUT 12</span><span class="s-name">Konrad Laimer</span></div><div class="sticker-row"><span class="s-code">AUT 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">AUT 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">AUT 15</span><span class="s-name">Florian Grillitsch</span></div><div class="sticker-row"><span class="s-code">AUT 16</span><span class="s-name">Nicolas Seiwald</span></div><div class="sticker-row"><span class="s-code">AUT 17</span><span class="s-name">Romano Schmid</span></div><div class="sticker-row"><span class="s-code">AUT 18</span><span class="s-name">Patrick Wimmer</span></div><div class="sticker-row"><span class="s-code">AUT 20</span><span class="s-name">Michael Gregoritsch</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇯🇴</span>
+    <span class="team-name">Jordan</span>
+    <span class="team-progress-text">2/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:10%"></div></div>
+    <span class="missing-count">18 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">JOR 2</span><span class="s-name">Yazeed Abulaila</span></div><div class="sticker-row"><span class="s-code">JOR 3</span><span class="s-name">Ihsan Haddad</span></div><div class="sticker-row"><span class="s-code">JOR 4</span><span class="s-name">Mohammad Abu Hashish</span></div><div class="sticker-row"><span class="s-code">JOR 5</span><span class="s-name">Yazan Al-Arab</span></div><div class="sticker-row"><span class="s-code">JOR 6</span><span class="s-name">Abdallah Nasib</span></div><div class="sticker-row"><span class="s-code">JOR 7</span><span class="s-name">Saleem Obaid</span></div><div class="sticker-row"><span class="s-code">JOR 8</span><span class="s-name">Mohammad Abualnadi</span></div><div class="sticker-row"><span class="s-code">JOR 9</span><span class="s-name">Ibrahim Saadeh</span></div><div class="sticker-row"><span class="s-code">JOR 10</span><span class="s-name">Nizar Al-Rashdan</span></div><div class="sticker-row"><span class="s-code">JOR 11</span><span class="s-name">Noor Al-Rawabdeh</span></div><div class="sticker-row"><span class="s-code">JOR 12</span><span class="s-name">Mohannad Abu Taha</span></div><div class="sticker-row"><span class="s-code">JOR 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">JOR 15</span><span class="s-name">Amer Jamous</span></div><div class="sticker-row"><span class="s-code">JOR 16</span><span class="s-name">Musa Al-Taamari</span></div><div class="sticker-row"><span class="s-code">JOR 17</span><span class="s-name">Yazan Al-Naimat</span></div><div class="sticker-row"><span class="s-code">JOR 18</span><span class="s-name">Mahmoud Al-Mardi</span></div><div class="sticker-row"><span class="s-code">JOR 19</span><span class="s-name">Ali Olwan</span></div><div class="sticker-row"><span class="s-code">JOR 20</span><span class="s-name">Mohammad Abu Zrayq</span></div></div>
+</div></div><div class="group-block"><div class="group-label">Group K</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇵🇹</span>
+    <span class="team-name">Portugal</span>
+    <span class="team-progress-text">5/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:25%"></div></div>
+    <span class="missing-count">15 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">POR 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">POR 2</span><span class="s-name">Diogo Costa</span></div><div class="sticker-row"><span class="s-code">POR 3</span><span class="s-name">Jose Sa</span></div><div class="sticker-row"><span class="s-code">POR 4</span><span class="s-name">Ruben Dias</span></div><div class="sticker-row"><span class="s-code">POR 5</span><span class="s-name">João Cancelo</span></div><div class="sticker-row"><span class="s-code">POR 6</span><span class="s-name">Diogo Dalot</span></div><div class="sticker-row"><span class="s-code">POR 9</span><span class="s-name">Bernardo Silva</span></div><div class="sticker-row"><span class="s-code">POR 10</span><span class="s-name">Bruno Fernandes</span></div><div class="sticker-row"><span class="s-code">POR 11</span><span class="s-name">Ruben Neves</span></div><div class="sticker-row"><span class="s-code">POR 12</span><span class="s-name">Vitinha</span></div><div class="sticker-row"><span class="s-code">POR 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">POR 16</span><span class="s-name">Cristiano Ronaldo</span></div><div class="sticker-row"><span class="s-code">POR 17</span><span class="s-name">Francisco Trincao</span></div><div class="sticker-row"><span class="s-code">POR 18</span><span class="s-name">João Felix</span></div><div class="sticker-row"><span class="s-code">POR 19</span><span class="s-name">Gonçalo Ramos</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇨🇩</span>
+    <span class="team-name">Congo DR</span>
+    <span class="team-progress-text">1/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:5%"></div></div>
+    <span class="missing-count">19 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">COD 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">COD 2</span><span class="s-name">Lionel Mpasi</span></div><div class="sticker-row"><span class="s-code">COD 3</span><span class="s-name">Aaron Wan-Bissaka</span></div><div class="sticker-row"><span class="s-code">COD 4</span><span class="s-name">Axel Tuanzebe</span></div><div class="sticker-row"><span class="s-code">COD 6</span><span class="s-name">Chancel Mbemba</span></div><div class="sticker-row"><span class="s-code">COD 7</span><span class="s-name">Joris Kayembe</span></div><div class="sticker-row"><span class="s-code">COD 8</span><span class="s-name">Charles Pickel</span></div><div class="sticker-row"><span class="s-code">COD 9</span><span class="s-name">Ngal'ayel Mukau</span></div><div class="sticker-row"><span class="s-code">COD 10</span><span class="s-name">Edo Kayembe</span></div><div class="sticker-row"><span class="s-code">COD 11</span><span class="s-name">Samuel Moutoussamy</span></div><div class="sticker-row"><span class="s-code">COD 12</span><span class="s-name">Noah Sadiki</span></div><div class="sticker-row"><span class="s-code">COD 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">COD 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">COD 15</span><span class="s-name">Théo Bongonda</span></div><div class="sticker-row"><span class="s-code">COD 16</span><span class="s-name">Meschak Elia</span></div><div class="sticker-row"><span class="s-code">COD 17</span><span class="s-name">Yoane Wissa</span></div><div class="sticker-row"><span class="s-code">COD 18</span><span class="s-name">Brian Cipenga</span></div><div class="sticker-row"><span class="s-code">COD 19</span><span class="s-name">Fiston Mayele</span></div><div class="sticker-row"><span class="s-code">COD 20</span><span class="s-name">Cédric Bakambu</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇺🇿</span>
+    <span class="team-name">Uzbekistan</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="missing-count">16 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">UZB 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">UZB 2</span><span class="s-name">Utkir Yusupov</span></div><div class="sticker-row"><span class="s-code">UZB 3</span><span class="s-name">Farrukh Savfiev</span></div><div class="sticker-row"><span class="s-code">UZB 5</span><span class="s-name">Umar Eshmurodov</span></div><div class="sticker-row"><span class="s-code">UZB 6</span><span class="s-name">Husniddin Aliqulov</span></div><div class="sticker-row"><span class="s-code">UZB 8</span><span class="s-name">Khojiakbar Alijonov</span></div><div class="sticker-row"><span class="s-code">UZB 9</span><span class="s-name">Abdukodir Khusanov</span></div><div class="sticker-row"><span class="s-code">UZB 10</span><span class="s-name">Odiljon Hamrobekov</span></div><div class="sticker-row"><span class="s-code">UZB 11</span><span class="s-name">Otabek Shukurov</span></div><div class="sticker-row"><span class="s-code">UZB 12</span><span class="s-name">Jamshid Iskanderov</span></div><div class="sticker-row"><span class="s-code">UZB 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">UZB 15</span><span class="s-name">Azizbek Turgunboev</span></div><div class="sticker-row"><span class="s-code">UZB 17</span><span class="s-name">Eldor Shomurodov</span></div><div class="sticker-row"><span class="s-code">UZB 18</span><span class="s-name">Oston Urunov</span></div><div class="sticker-row"><span class="s-code">UZB 19</span><span class="s-name">Jaloliddin Masharipov</span></div><div class="sticker-row"><span class="s-code">UZB 20</span><span class="s-name">Igor Sergeev</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇨🇴</span>
+    <span class="team-name">Colombia</span>
+    <span class="team-progress-text">4/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:20%"></div></div>
+    <span class="missing-count">16 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">COL 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">COL 2</span><span class="s-name">Camilo Vargas</span></div><div class="sticker-row"><span class="s-code">COL 3</span><span class="s-name">David Ospina</span></div><div class="sticker-row"><span class="s-code">COL 4</span><span class="s-name">Dávinson Sánchez</span></div><div class="sticker-row"><span class="s-code">COL 5</span><span class="s-name">Yerry Mina</span></div><div class="sticker-row"><span class="s-code">COL 6</span><span class="s-name">Daniel Munoz</span></div><div class="sticker-row"><span class="s-code">COL 7</span><span class="s-name">Johan Mojica</span></div><div class="sticker-row"><span class="s-code">COL 8</span><span class="s-name">Jhon Lucumí</span></div><div class="sticker-row"><span class="s-code">COL 9</span><span class="s-name">Santiago Arias</span></div><div class="sticker-row"><span class="s-code">COL 11</span><span class="s-name">Kevin Castaño</span></div><div class="sticker-row"><span class="s-code">COL 12</span><span class="s-name">Richard Rios</span></div><div class="sticker-row"><span class="s-code">COL 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">COL 17</span><span class="s-name">Jorge Carrascal</span></div><div class="sticker-row"><span class="s-code">COL 18</span><span class="s-name">Jon Arias</span></div><div class="sticker-row"><span class="s-code">COL 19</span><span class="s-name">Jhon Cordova</span></div><div class="sticker-row"><span class="s-code">COL 20</span><span class="s-name">Luis Suarez</span></div></div>
+</div></div><div class="group-block"><div class="group-label">Group L</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
+    <span class="team-name">England</span>
+    <span class="team-progress-text">2/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:10%"></div></div>
+    <span class="missing-count">18 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">ENG 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">ENG 2</span><span class="s-name">Jordan Pickford</span></div><div class="sticker-row"><span class="s-code">ENG 4</span><span class="s-name">Marc Guéhi</span></div><div class="sticker-row"><span class="s-code">ENG 6</span><span class="s-name">Trent Alexander-Arnold</span></div><div class="sticker-row"><span class="s-code">ENG 7</span><span class="s-name">Reece James</span></div><div class="sticker-row"><span class="s-code">ENG 8</span><span class="s-name">Dan Burn</span></div><div class="sticker-row"><span class="s-code">ENG 9</span><span class="s-name">Jordan Henderson</span></div><div class="sticker-row"><span class="s-code">ENG 10</span><span class="s-name">Declan Rice</span></div><div class="sticker-row"><span class="s-code">ENG 11</span><span class="s-name">Jude Bellingham</span></div><div class="sticker-row"><span class="s-code">ENG 12</span><span class="s-name">Cole Palmer</span></div><div class="sticker-row"><span class="s-code">ENG 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">ENG 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">ENG 15</span><span class="s-name">Morgan Rogers</span></div><div class="sticker-row"><span class="s-code">ENG 16</span><span class="s-name">Anthony Gordon</span></div><div class="sticker-row"><span class="s-code">ENG 17</span><span class="s-name">Phil Foden</span></div><div class="sticker-row"><span class="s-code">ENG 18</span><span class="s-name">Bukayo Saka</span></div><div class="sticker-row"><span class="s-code">ENG 19</span><span class="s-name">Harry Kane</span></div><div class="sticker-row"><span class="s-code">ENG 20</span><span class="s-name">Marcus Rashford</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇭🇷</span>
+    <span class="team-name">Croatia</span>
+    <span class="team-progress-text">5/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:25%"></div></div>
+    <span class="missing-count">15 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">CRO 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">CRO 2</span><span class="s-name">Dominik Livaković</span></div><div class="sticker-row"><span class="s-code">CRO 5</span><span class="s-name">Josip Stanišić</span></div><div class="sticker-row"><span class="s-code">CRO 6</span><span class="s-name">Luka Vušković</span></div><div class="sticker-row"><span class="s-code">CRO 7</span><span class="s-name">Josip Sutalo</span></div><div class="sticker-row"><span class="s-code">CRO 8</span><span class="s-name">Kristijan Jakic</span></div><div class="sticker-row"><span class="s-code">CRO 9</span><span class="s-name">Luka Modrić</span></div><div class="sticker-row"><span class="s-code">CRO 10</span><span class="s-name">Mateo Kovacic</span></div><div class="sticker-row"><span class="s-code">CRO 11</span><span class="s-name">Martin Baturina</span></div><div class="sticker-row"><span class="s-code">CRO 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">CRO 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">CRO 16</span><span class="s-name">Petar Sucic</span></div><div class="sticker-row"><span class="s-code">CRO 17</span><span class="s-name">Ivan Perišić</span></div><div class="sticker-row"><span class="s-code">CRO 18</span><span class="s-name">Marco Pasalic</span></div><div class="sticker-row"><span class="s-code">CRO 19</span><span class="s-name">Ante Budimir</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇬🇭</span>
+    <span class="team-name">Ghana</span>
+    <span class="team-progress-text">3/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:15%"></div></div>
+    <span class="missing-count">17 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">GHA 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">GHA 2</span><span class="s-name">Lawrence Ati Zigi</span></div><div class="sticker-row"><span class="s-code">GHA 4</span><span class="s-name">Mohammed Salisu</span></div><div class="sticker-row"><span class="s-code">GHA 6</span><span class="s-name">Alexander Djiku</span></div><div class="sticker-row"><span class="s-code">GHA 7</span><span class="s-name">Gideon Mensah</span></div><div class="sticker-row"><span class="s-code">GHA 8</span><span class="s-name">Caleb Yirenkyi</span></div><div class="sticker-row"><span class="s-code">GHA 10</span><span class="s-name">Thomas Partey</span></div><div class="sticker-row"><span class="s-code">GHA 11</span><span class="s-name">Salis Abdul Samed</span></div><div class="sticker-row"><span class="s-code">GHA 12</span><span class="s-name">Kamaldeen Sulemana</span></div><div class="sticker-row"><span class="s-code">GHA 13</span><span class="s-name">Team Photo</span></div><div class="sticker-row"><span class="s-code">GHA 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">GHA 15</span><span class="s-name">Mohammed Kudus</span></div><div class="sticker-row"><span class="s-code">GHA 16</span><span class="s-name">Inaki Williams</span></div><div class="sticker-row"><span class="s-code">GHA 17</span><span class="s-name">Jordan Ayew</span></div><div class="sticker-row"><span class="s-code">GHA 18</span><span class="s-name">Andrew Ayew</span></div><div class="sticker-row"><span class="s-code">GHA 19</span><span class="s-name">Joseph Paintsil</span></div><div class="sticker-row"><span class="s-code">GHA 20</span><span class="s-name">Osman Bukari</span></div></div>
+</div>
+<div class="team-block">
+  <div class="team-header" onclick="toggleTeam(this)">
+    <span class="team-flag">🇵🇦</span>
+    <span class="team-name">Panama</span>
+    <span class="team-progress-text">2/20</span>
+    <div class="team-bar-wrap"><div class="team-bar" style="width:10%"></div></div>
+    <span class="missing-count">18 missing</span>
+    <span class="chevron">›</span>
+  </div>
+  <div class="team-stickers collapsed"><div class="sticker-row"><span class="s-code">PAN 1</span><span class="s-name">Team Badge<span class="foil-badge">★ foil</span></span></div><div class="sticker-row"><span class="s-code">PAN 2</span><span class="s-name">Orlando Mosquera</span></div><div class="sticker-row"><span class="s-code">PAN 4</span><span class="s-name">Fidel Escobar</span></div><div class="sticker-row"><span class="s-code">PAN 5</span><span class="s-name">Andres Andrade</span></div><div class="sticker-row"><span class="s-code">PAN 6</span><span class="s-name">Michael Amir Murillo</span></div><div class="sticker-row"><span class="s-code">PAN 7</span><span class="s-name">Eric Davis</span></div><div class="sticker-row"><span class="s-code">PAN 8</span><span class="s-name">Jose Cordoba</span></div><div class="sticker-row"><span class="s-code">PAN 9</span><span class="s-name">Cesar Blackman</span></div><div class="sticker-row"><span class="s-code">PAN 10</span><span class="s-name">Cristian Martinez</span></div><div class="sticker-row"><span class="s-code">PAN 11</span><span class="s-name">Aníbal Godoy</span></div><div class="sticker-row"><span class="s-code">PAN 12</span><span class="s-name">Adalberto Carrasquilla</span></div><div class="sticker-row"><span class="s-code">PAN 14</span><span class="s-name">Player 14</span></div><div class="sticker-row"><span class="s-code">PAN 15</span><span class="s-name">Édgar Bárcenas</span></div><div class="sticker-row"><span class="s-code">PAN 16</span><span class="s-name">Carlos Harvey</span></div><div class="sticker-row"><span class="s-code">PAN 17</span><span class="s-name">Ismael Díaz</span></div><div class="sticker-row"><span class="s-code">PAN 18</span><span class="s-name">Jose Fajardo</span></div><div class="sticker-row"><span class="s-code">PAN 19</span><span class="s-name">Cecilio Waterman</span></div><div class="sticker-row"><span class="s-code">PAN 20</span><span class="s-name">Jose Luiz Rodriguez</span></div></div>
+</div></div>
+  </div>
+  <div id="tab-extras" class="tab-panel">
+    <p class="empty-state">No extras scanned yet.<br>Drop photos of your duplicate stickers in <code>images/inbox/</code> and run scan.py</p>
+  </div>
+</div>
+
+<div class="footer">Generated Jun 11, 2026 14:06 &nbsp;·&nbsp; Panini FIFA World Cup 2026 Tracker</div>
+
+<script>
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+function toggleTeam(header) {
+  const stickers = header.nextElementSibling;
+  const isOpen = !stickers.classList.contains('collapsed');
+  stickers.classList.toggle('collapsed', isOpen);
+  header.classList.toggle('open', !isOpen);
+}
+
+function doSearch(q) {
+  q = q.toLowerCase().trim();
+  if (!q) {
+    document.querySelectorAll('.team-block, .extra-card, .sticker-row').forEach(el => el.classList.remove('hidden'));
+    document.querySelectorAll('.team-stickers').forEach(el => el.classList.add('collapsed'));
+    document.querySelectorAll('.team-header').forEach(el => el.classList.remove('open'));
+    return;
+  }
+  // Search sticker rows
+  document.querySelectorAll('.team-block').forEach(block => {
+    const rows = block.querySelectorAll('.sticker-row');
+    let anyMatch = false;
+    rows.forEach(row => {
+      const txt = row.textContent.toLowerCase();
+      const match = txt.includes(q);
+      row.classList.toggle('hidden', !match);
+      if (match) anyMatch = true;
+    });
+    // Also check team name
+    const teamTxt = block.querySelector('.team-name')?.textContent.toLowerCase() || '';
+    if (teamTxt.includes(q)) {
+      rows.forEach(r => r.classList.remove('hidden'));
+      anyMatch = true;
+    }
+    block.classList.toggle('hidden', !anyMatch);
+    if (anyMatch) {
+      block.querySelector('.team-stickers')?.classList.remove('collapsed');
+      block.querySelector('.team-header')?.classList.add('open');
+    }
+  });
+  // Search extras
+  document.querySelectorAll('.extra-card').forEach(card => {
+    card.classList.toggle('hidden', !card.textContent.toLowerCase().includes(q));
+  });
+}
+</script>
+</body>
+</html>
